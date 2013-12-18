@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="urn:shemas-jetbrains-com:teamcity-plugin-v1-xml">
+  <info>
+    <name>sbt-runner</name>
+    <display-name>Simple Build Tool (Scala)</display-name>
+    <version>1.0</version>
+    <description>Scala Simple Build Tool Runner</description>
+
+    <vendor>
+      <name>JetBrains, s.r.o.</name>
+      <url>http://www.jetbrains.com</url>
+    </vendor>
+  </info>
+</teamcity-plugin>

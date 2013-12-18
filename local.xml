@@ -1,0 +1,45 @@
+<project name="tc-sbt-local-deploy" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="antlib:org.apache.maven.artifact.ant ">
+    <description>
+        deploy local libs to maven
+    </description>
+    <path id="maven-ant-tasks.classpath" path="antlib/maven-ant-tasks-2.1.3.jar"/>
+
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+             uri="antlib:org.apache.maven.artifact.ant"
+             classpathref="maven-ant-tasks.classpath"/>
+
+
+    <artifact:pom id="openapi-pom" groupId="com.jetbrains" artifactId="openapi"
+                  version="1.0" packaging="jar">
+    </artifact:pom>
+
+    <artifact:install file="lib/openapi.jar" taskname="i1"
+             pomRefId="openapi-pom"/>
+
+
+    <artifact:deploy file="lib/openapi.jar" pomrefid="openapi-pom" taskname="i2">
+        <remoteRepository url="file:repo"/>
+    </artifact:deploy>
+
+
+
+
+
+    <!--mvn deploy:deploy-file
+    -Durl=file:repo/ -Dfile=lib/openapi.jar -DgroupId=com.jetbrains -DartifactId=openapi -Dpackaging=jar -Dversion=1.0
+
+    mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/util.jar -DgroupId=com.jetbrains -DartifactId=util -Dpackaging=jar -Dversion=1.0
+
+    mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/agent.jar -DgroupId=com.jetbrains -DartifactId=agent -Dpackaging=jar -Dversion=1.0
+
+    mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/agent-api.jar -DgroupId=com.jetbrains -DartifactId=agent-api -Dpackaging=jar -Dversion=2.0
+
+    mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/annotations.jar -DgroupId=com.jetbrains -DartifactId=annotations -Dpackaging=jar -Dversion=1.0
+
+    mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/common-api.jar -DgroupId=com.jetbrains -DartifactId=common-api -Dpackaging=jar -Dversion=1.0
+
+    mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/resources_en.jar -DgroupId=com.jetbrains -DartifactId=resources-en -Dpackaging=jar -Dversion=1.0
+-->
+</project>

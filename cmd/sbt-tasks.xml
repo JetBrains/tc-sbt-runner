@@ -1,0 +1,19 @@
+<project name="SBTInstall" default="install" basedir=".">
+    <description>
+        install SBT on local host
+    </description>
+
+    <property file="sbt-tasks.properties"/>
+
+    <target name="download">
+        <get src="${sbt.launch.download.url}" dest="sbt-launch.jar"/>
+    </target>
+
+    <target name="install" depends="download">
+        <java jar="sbt-launch.jar"
+              failonerror="true"
+                >
+            <arg value="-h $"/>
+        </java>
+    </target>
+</project>
