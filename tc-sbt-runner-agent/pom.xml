@@ -32,16 +32,23 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>common-api</artifactId>
+            <version>${teamcity-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <dependency>
-            <groupId>com.jetbrains</groupId>
+            <groupId>org.jetbrains.teamcity.idea</groupId>
             <artifactId>openapi</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.jetbrains</groupId>
+            <groupId>org.jetbrains.teamcity.idea</groupId>
             <artifactId>annotations</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
@@ -49,7 +56,7 @@
 
 
         <dependency>
-            <groupId>com.jetbrains</groupId>
+            <groupId>org.jetbrains.teamcity.idea</groupId>
             <artifactId>util</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
@@ -57,19 +64,18 @@
 
 
         <dependency>
-            <groupId>com.jetbrains</groupId>
-            <artifactId>common-api</artifactId>
-            <version>${teamcity-version}</version>
+            <groupId>org.jetbrains.teamcity.idea</groupId>
+            <artifactId>resources_en</artifactId>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains</groupId>
-            <artifactId>resources-en</artifactId>
-            <version>LATEST</version>
+            <artifactId>agent</artifactId>
+            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
-
 
     </dependencies>
 </project>

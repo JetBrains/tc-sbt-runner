@@ -11,6 +11,12 @@
     </properties>
     <repositories>
         <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <releases><enabled>true</enabled><updatePolicy>always</updatePolicy></releases>
+            <url>file:repo</url>
+        </repository>
+        <repository>
             <id>JetBrains</id>
             <url>http://repository.jetbrains.com/all</url>
         </repository>
