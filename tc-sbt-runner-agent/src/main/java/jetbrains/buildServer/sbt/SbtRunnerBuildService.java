@@ -8,16 +8,19 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
 public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final Logger LOG = Logger.getLogger(SbtRunnerBuildService.class.getName());
 
+    public static final String SBT_LAUNCHER_JAR_NAME = "sbt-launch.jar";
+
     private final static String[] SBT_JARS = new String[]{
-            "jansi.jar",
-            "sbt-launch.jar",
+            SBT_LAUNCHER_JAR_NAME,
             "classes"
     };
     private final IvyCacheProvider myIvyCacheProvider;
@@ -131,7 +134,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
             private void logMessage(@NotNull final String message) {
 
-               getLogger().message(message);
+                getLogger().message(message);
             }
 
             private void logWarning(@NotNull final String message) {
@@ -197,12 +200,30 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
         cliBuilder.setJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerParameters()));
         cliBuilder.setClassPath(getClasspath());
-        cliBuilder.setMainClass("xsbt.boot.Boot");
+        cliBuilder.setMainClass(getMainClassName());
         cliBuilder.setProgramArgs(getProgramParameters());
         cliBuilder.setWorkingDir(getWorkingDirectory().getAbsolutePath());
 
         return buildCommandline(cliBuilder);
     }
+
+    @NotNull
+    private String getMainClassName() throws RunBuildException {
+        try {
+            JarFile jf = new JarFile(getSbtLauncher());
+            return jf.getManifest().getMainAttributes().getValue("Main-Class");
+        } catch (IOException e) {
+            throw new RunBuildException("An error occurred during reading manifest in SBT launcher",e);
+        }
+    }
+
+    @NotNull
+    private File getSbtLauncher() {
+        String sbtHome = getSbtHome();
+        File jarDir = new File(sbtHome, "bin");
+        return new File(jarDir, SBT_LAUNCHER_JAR_NAME);
+    }
+
 
     @NotNull
     private ProgramCommandLine buildCommandline(@NotNull final JavaCommandLineBuilder cliBuilder) throws RunBuildException {
@@ -248,6 +269,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         }
         return sb.toString();
     }
+
 
     @NotNull
     private String getSbtHome() {
