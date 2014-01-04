@@ -23,7 +23,6 @@ public class SbtRunnerRunType extends RunType {
   @Override
   public PropertiesProcessor getRunnerPropertiesProcessor() {
     return new PropertiesProcessor() {
-      @Override
       public Collection<InvalidProperty> process(Map<String, String> props) {
         List<InvalidProperty> errors = new ArrayList<InvalidProperty>();
         if (StringUtil.isEmptyOrSpaces(props.get(SbtRunnerConstants.SBT_HOME_PARAM))) {

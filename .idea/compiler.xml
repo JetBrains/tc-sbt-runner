@@ -31,6 +31,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="tc-sbt-runner" target="1.5" />
+      <module name="tc-sbt-runner-agent" target="1.5" />
+      <module name="tc-sbt-runner-common" target="1.5" />
+      <module name="tc-sbt-runner-server" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -8,6 +8,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="tc-sbt-runner-agent" />
+    <orderEntry type="module" module-name="tc-sbt-runner-common" />
+    <orderEntry type="module" module-name="tc-sbt-runner-server" />
   </component>
 </module>
 
