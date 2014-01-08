@@ -5,19 +5,27 @@ import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.jar.JarFile;
-import java.util.logging.Logger;
 
 public class SbtRunnerBuildService extends BuildServiceAdapter {
 
-    private static final Logger LOG = Logger.getLogger(SbtRunnerBuildService.class.getName());
+    private static final String SBT_LAUNCHER_JAR_NAME = "sbt-launch.jar";
 
-    public static final String SBT_LAUNCHER_JAR_NAME = "sbt-launch.jar";
+    private static final String SBT_PATCH_JAR_NAME = "sbt-teamcity-logger.jar";
+
+    private static final String AUTO_INSTALL_FOLDER = "tc-sbt";
+
+    private static final String AUTO_INSTALL_GLOBALS_FOLDER = "tc-sbt-globals";
+
+    private static final String AUTO_INSTALL_FLAG = "auto";
+
 
     private final static String[] SBT_JARS = new String[]{
             SBT_LAUNCHER_JAR_NAME,
@@ -26,7 +34,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private final IvyCacheProvider myIvyCacheProvider;
 
     public SbtRunnerBuildService(IvyCacheProvider ivyCacheProvider) {
-        LOG.info("SbtRunnerBuildService.constructor");
         myIvyCacheProvider = ivyCacheProvider;
     }
 
@@ -34,152 +41,19 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @Override
     public List<ProcessListener> getListeners() {
         return Collections.<ProcessListener>singletonList(new ProcessListenerAdapter() {
-            private final List<String> myLastErrors = new ArrayList<String>();
-            public String myCompilingBlock;
-
             @Override
             public void onStandardOutput(@NotNull String line) {
-                //String trimmed = line.trim();
-
-                /*boolean newCompileBlock = trimmed.startsWith("[info] Compiling ");
-                if (newCompileBlock) {
-                    openCompileBlock(line);
-                } else {
-                    if (myCompilingBlock != null && !(trimmed.startsWith("[error] ") || trimmed.startsWith("[warn] "))) {
-                        closeCompileBlock();
-                    }
-
-                    if (myCompilingBlock != null) {
-                        for (Pattern p : compileFinished) {
-                            if (p.matcher(trimmed).find()) {
-                                closeCompileBlock();
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                for (Pattern p : errorPatterns) {
-                    if (p.matcher(trimmed).find()) {
-                        myLastErrors.add(line);
-                        return;
-                    }
-                }
-
-                flushErrors();
-
-                if (trimmed.startsWith("[warn] ")) {
-                    logWarning(line);
-                    return;
-                }
-
-                if (actionPattern.matcher(trimmed).find()) {
-                    logProgress(line);
-                } else {
-                    logMessage(line);
-                }*/
-                logMessage(line);
+                getLogger().message(line);
             }
 
-            private void openCompileBlock(@NotNull String line) {
-                closeCompileBlock();
-
-                String[] splitted = line.split(" sources? to ");
-                if (splitted.length > 1) {
-                    myCompilingBlock = splitted[0];
-                    if (line.contains("sources to")) {
-                        myCompilingBlock += " sources";
-                    } else {
-                        myCompilingBlock += " source";
-                    }
-                } else {
-                    myCompilingBlock = line;
-                }
-
-                myCompilingBlock = removePrefix(myCompilingBlock);
-
-                //getLogger().logMessage(DefaultMessagesInfo.createCompilationBlockStart(myCompilingBlock));
-            }
-
-            private void closeCompileBlock() {
-                if (myCompilingBlock != null) {
-                    if (myLastErrors.isEmpty()) {
-                        doCloseCompileBlock();
-                    } else {
-                        flushErrors();
-                    }
-                }
-                myCompilingBlock = null;
-            }
-
-            private void doCloseCompileBlock() {
-                //getLogger().logMessage(DefaultMessagesInfo.createCompilationBlockEnd(myCompilingBlock));
-            }
-
-            @Override
             public void onErrorOutput(@NotNull String line) {
-                logWarning(line);
+                getLogger().error(line);
             }
 
             @Override
             public void processFinished(int exitCode) {
-                flushErrors();
-                closeCompileBlock();
                 super.processFinished(exitCode);
             }
-
-            private void logProgress(@NotNull final String message) {
-                getLogger().progressMessage(removePrefix(message));
-            }
-
-            private void logMessage(@NotNull final String message) {
-
-                getLogger().message(message);
-            }
-
-            private void logWarning(@NotNull final String message) {
-                //getLogger().warning(removePrefix(message));
-            }
-
-            private void logError(@NotNull final String message) {
-                //getLogger().error(removePrefix(message));
-            }
-
-            private String removePrefix(@NotNull String message) {
-                if (message.startsWith("[warn] ") || message.startsWith("[info] ")) {
-                    return message.substring("[warn] ".length());
-                }
-                if (message.startsWith("[error] ")) {
-                    return message.substring("[error] ".length());
-                }
-                return message;
-            }
-
-            private boolean flushErrors() {
-                if (myLastErrors.isEmpty()) return false;
-
-                for (String err : myLastErrors) {
-                    logError(err);
-                }
-
-                if (myCompilingBlock != null) {
-                    doCloseCompileBlock();
-
-                    String id = myLastErrors.get(0);
-                    if (id.length() > 60) {
-                        id = id.substring(0, 60); // can't be longer than 60 chars
-                    }
-
-                    /*getLogger().logBuildProblem(
-                            BuildProblemData.createBuildProblem(id,
-                                    BuildProblemData.TC_COMPILATION_ERROR_TYPE,
-                                    "Sbt reported compilation errors found"));    */
-                }
-
-                myLastErrors.clear();
-                return true;
-            }
-
         });
     }
 
@@ -187,6 +61,14 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @NotNull
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
+        boolean autoInstall = AUTO_INSTALL_FLAG.equalsIgnoreCase(getRunnerParameters().get(SbtRunnerConstants.SBT_HOME_PARAM));
+
+        if (autoInstall) {
+            getLogger().message("SBT will be installed automatically");
+            installAndPatchSbt();
+            getLogger().message("SBT successfully installed");
+        }
+
         JavaCommandLineBuilder cliBuilder = new JavaCommandLineBuilder();
         String javaHome = getRunnerParameters().get(JavaRunnerConstants.TARGET_JDK_HOME);
         cliBuilder.setJavaHome(javaHome);
@@ -201,19 +83,64 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         cliBuilder.setJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerParameters()));
         cliBuilder.setClassPath(getClasspath());
         cliBuilder.setMainClass(getMainClassName());
-        cliBuilder.setProgramArgs(getProgramParameters());
+
+        List<String> programParameters = getProgramParameters();
+        if (autoInstall) {
+            programParameters = addDirectoriesParameters(programParameters);
+        }
+        cliBuilder.setProgramArgs(programParameters);
+
         cliBuilder.setWorkingDir(getWorkingDirectory().getAbsolutePath());
 
         return buildCommandline(cliBuilder);
     }
 
+    private List<String> addDirectoriesParameters(@NotNull List<String> programParameters) {
+        List<String> params = new ArrayList<String>();
+        params.add(String.format("-Dsbt.global.base=%s", getAutoInstallSbtFolder()));
+        params.add(String.format("-Dsbt.global.plugins=%s", getAutoInstallSbtGlobalsFolder()));
+        params.addAll(programParameters);
+        //-Dsbt.log.format=false
+        return params;
+    }
+
+
+    @NotNull
+    private String getAutoInstallSbtFolder() {
+        return getWorkingDirectory() + File.separator + AUTO_INSTALL_FOLDER;
+    }
+
+    @NotNull
+    private String getAutoInstallSbtGlobalsFolder() {
+        return getWorkingDirectory() + File.separator + AUTO_INSTALL_GLOBALS_FOLDER;
+    }
+
+    private void installAndPatchSbt() {
+        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_LAUNCHER_JAR_NAME, getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME);
+        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_PATCH_JAR_NAME, getAutoInstallSbtGlobalsFolder() + File.separator
+                + "lib" + File.separator + SBT_PATCH_JAR_NAME);
+    }
+
+
+    private void copyFiles(@NotNull String name, @NotNull String destination) {
+        try {
+            URL inputUrl = getClass().getClassLoader().getResource(name);
+            getLogger().message(String.format("Copying from %s to %s", name, destination));
+            FileUtils.copyURLToFile(inputUrl, new File(destination));
+        } catch (IOException e) {
+            getLogger().error(e.getMessage());
+        }
+    }
+
     @NotNull
     private String getMainClassName() throws RunBuildException {
         try {
-            JarFile jf = new JarFile(getSbtLauncher());
+            File sbtLauncher = getSbtLauncher();
+            getLogger().message("Retrieve SBT main class name from: " + sbtLauncher);
+            JarFile jf = new JarFile(sbtLauncher);
             return jf.getManifest().getMainAttributes().getValue("Main-Class");
         } catch (IOException e) {
-            throw new RunBuildException("An error occurred during reading manifest in SBT launcher",e);
+            throw new RunBuildException("An error occurred during reading manifest in SBT launcher", e);
         }
     }
 
@@ -273,7 +200,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     @NotNull
     private String getSbtHome() {
-        return getRunnerParameters().get(SbtRunnerConstants.SBT_HOME_PARAM);
+        String userSbtFolder = getRunnerParameters().get(SbtRunnerConstants.SBT_HOME_PARAM);
+        boolean autoInstall = AUTO_INSTALL_FLAG.equalsIgnoreCase(userSbtFolder);
+        if (autoInstall) {
+            return getAutoInstallSbtFolder();
+        }
+        return userSbtFolder;
     }
 
     @NotNull

@@ -5,35 +5,34 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
-<l:settingsGroup title="Sbt Parameters">
-
+<l:settingsGroup title="SBT Parameters">
     <tr>
         <th>
-            <label for="sbt.args">Sbt commands:</label>
+            <label for="sbt.args">SBT commands:</label>
         </th>
         <td>
             <props:textProperty name="sbt.args" className="longField"/>
             <span class="smallNote">Commands to execute.</span>
         </td>
     </tr>
-
     <tr>
-        <th><label for="sbt.home">Sbt home path: <l:star/></label></th>
+        <th><label for="sbt.home">SBT home path:<l:star/></label></th>
         <td>
             <props:textProperty name="sbt.home" className="longField"/>
+            <span class="smallNote">Path to existed SBT or 'auto' for automatic last version download</span>
             <span class="error" id="error_sbt.home"></span>
         </td>
     </tr>
 
     <tr>
-        <th><label for="sbt.version">Sbt version:</label></th>
+        <th><label for="sbt.version">SBT version:</label></th>
         <td>
             <props:textProperty name="sbt.version" className="longField"/>
-            <span class="smallNote">Sbt version to use, optional, usually taken from project/build.properties file</span>
+            <span class="smallNote">SBT version to use, optional, usually taken from project/build.properties file</span>
         </td>
     </tr>
 
-    <forms:workingDirectory />
+    <forms:workingDirectory/>
 
 </l:settingsGroup>
 <l:settingsGroup title="Java Parameters">
