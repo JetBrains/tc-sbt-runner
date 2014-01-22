@@ -16,6 +16,17 @@
         </td>
     </tr>
     <tr>
+        <th><label for="sbt.installationMode">SBT installation:<l:star/></label></th>
+        <td>
+            <props:selectProperty name="sbt.installationMode" className="shortField" id="sbtInstallationSelection"
+                                  onchange="syncSBTInstMode(); return true;">
+                <props:option value="auto">&lt;Auto&gt;</props:option>
+                <props:option value="custom">&lt;Custom&gt;</props:option>
+            </props:selectProperty>
+            <span class="smallNote">In 'Auto' mode the latest SBT version will be automatically downloaded, installed and prepared for work with TeamCity</span>
+        </td>
+    </tr>
+    <tr id="sbt.home_selection">
         <th><label for="sbt.home">SBT home path:<l:star/></label></th>
         <td>
             <props:textProperty name="sbt.home" className="longField"/>
@@ -24,15 +35,19 @@
         </td>
     </tr>
 
-    <tr>
-        <th><label for="sbt.version">SBT version:</label></th>
-        <td>
-            <props:textProperty name="sbt.version" className="longField"/>
-            <span class="smallNote">SBT version to use, optional, usually taken from project/build.properties file</span>
-        </td>
-    </tr>
-
     <forms:workingDirectory/>
+    <script type="text/javascript">
+        function syncSBTInstMode() {
+            if ($("sbtInstallationSelection").value=='custom') {
+                BS.Util.show("sbt.home_selection");
+            }
+            else {
+                BS.Util.hide("sbt.home_selection");
+            }
+            BS.MultilineProperties.updateVisible();
+        }
+        syncSBTInstMode();
+    </script>
 
 </l:settingsGroup>
 <l:settingsGroup title="Java Parameters">

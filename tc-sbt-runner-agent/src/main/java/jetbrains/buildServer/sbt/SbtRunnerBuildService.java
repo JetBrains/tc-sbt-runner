@@ -61,9 +61,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @NotNull
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-        boolean autoInstall = AUTO_INSTALL_FLAG.equalsIgnoreCase(getRunnerParameters().get(SbtRunnerConstants.SBT_HOME_PARAM));
 
-        if (autoInstall) {
+        if (isAutoInstallMode()) {
             getLogger().message("SBT will be installed automatically");
             installAndPatchSbt();
             getLogger().message("SBT successfully installed");
@@ -85,7 +84,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         cliBuilder.setMainClass(getMainClassName());
 
         List<String> programParameters = getProgramParameters();
-        if (autoInstall) {
+        if (isAutoInstallMode()) {
             programParameters = addDirectoriesParameters(programParameters);
         }
         cliBuilder.setProgramArgs(programParameters);
@@ -163,12 +162,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     @NotNull
     private Map<String, String> getVMProperties() throws RunBuildException {
-        String sbtVersion = getRunnerParameters().get(SbtRunnerConstants.SBT_VERSION_PARAM);
-
         Map<String, String> sysProps = new HashMap<String, String>();
-        if (!StringUtil.isEmptyOrSpaces(sbtVersion)) {
-            sysProps.put("sbt.version", sbtVersion);
-        }
 
         String ivyCachePath = getIvyCachePath();
         sysProps.put("sbt.ivy.home", ivyCachePath);
@@ -201,11 +195,15 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @NotNull
     private String getSbtHome() {
         String userSbtFolder = getRunnerParameters().get(SbtRunnerConstants.SBT_HOME_PARAM);
-        boolean autoInstall = AUTO_INSTALL_FLAG.equalsIgnoreCase(userSbtFolder);
-        if (autoInstall) {
+        if (isAutoInstallMode()) {
             return getAutoInstallSbtFolder();
         }
         return userSbtFolder;
+    }
+
+    private boolean isAutoInstallMode(){
+        String sbtInstallationMode = getRunnerParameters().get(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM);
+        return AUTO_INSTALL_FLAG.equalsIgnoreCase(sbtInstallationMode);
     }
 
     @NotNull

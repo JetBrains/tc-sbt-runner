@@ -7,5 +7,6 @@ public interface SbtRunnerConstants {
 
   String SBT_HOME_PARAM = "sbt.home";
   String SBT_ARGS_PARAM = "sbt.args";
-  String SBT_VERSION_PARAM = "sbt.version";
+  String SBT_INSTALLATION_MODE_PARAM = "sbt.installationMode";
+
 }

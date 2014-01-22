@@ -51,7 +51,8 @@ public class SbtRunnerRunType extends RunType {
   @Override
   public Map<String, String> getDefaultRunnerProperties() {
     return new HashMap<String, String>() {{
-        put("sbt.args", "clean compile");
+        put(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
+        put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "Auto");
         put("target.jdk.home", "%env.JDK_16%");
         put("jvmArgs", DEFAULT_SBT_JVM_ARGS);
     }};
