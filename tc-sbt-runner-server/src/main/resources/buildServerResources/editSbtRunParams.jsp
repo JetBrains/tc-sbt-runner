@@ -15,7 +15,7 @@
         </td>
     </tr>
     <tr>
-        <th><label for="sbt.installationMode">SBT installation:<l:star/></label></th>
+        <th><label for="sbt.installationMode">SBT installation mode:<l:star/></label></th>
         <td>
             <props:selectProperty name="sbt.installationMode" className="shortField" id="sbtInstallationSelection"
                                   onchange="syncSBTInstMode(); return true;">
