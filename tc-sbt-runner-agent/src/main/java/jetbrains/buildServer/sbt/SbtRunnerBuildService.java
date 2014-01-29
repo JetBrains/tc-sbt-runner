@@ -115,15 +115,15 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     }
 
     private void installAndPatchSbt() {
-        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_LAUNCHER_JAR_NAME, getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME);
-        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_PATCH_JAR_NAME, getAutoInstallSbtGlobalsFolder() + File.separator
+        copyFiles(File.separator + AUTO_INSTALL_FOLDER + File.separator + SBT_LAUNCHER_JAR_NAME, getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME);
+        copyFiles(File.separator + AUTO_INSTALL_FOLDER + File.separator + SBT_PATCH_JAR_NAME, getAutoInstallSbtGlobalsFolder() + File.separator
                 + "lib" + File.separator + SBT_PATCH_JAR_NAME);
     }
 
 
     private void copyFiles(@NotNull String name, @NotNull String destination) {
         try {
-            URL inputUrl = getClass().getClassLoader().getResource(name);
+            URL inputUrl = getClass().getResource(name);
             getLogger().message(String.format("Copying from %s to %s", inputUrl, destination));
             FileUtils.copyURLToFile(inputUrl, new File(destination));
         } catch (IOException e) {
