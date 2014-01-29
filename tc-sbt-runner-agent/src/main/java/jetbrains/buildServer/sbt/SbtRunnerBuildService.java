@@ -115,8 +115,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     }
 
     private void installAndPatchSbt() {
-        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_LAUNCHER_JAR_NAME, getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME);
-        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_PATCH_JAR_NAME, getAutoInstallSbtGlobalsFolder() + File.separator
+        copyFiles(getAutoInstallSbtFolder() + File.separator + SBT_LAUNCHER_JAR_NAME, getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME);
+        copyFiles(getAutoInstallSbtFolder() + File.separator + SBT_PATCH_JAR_NAME, getAutoInstallSbtGlobalsFolder() + File.separator
                 + "lib" + File.separator + SBT_PATCH_JAR_NAME);
     }
 
