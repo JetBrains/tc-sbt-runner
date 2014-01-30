@@ -61,6 +61,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
 
+
         if (isAutoInstallMode()) {
             getLogger().message("SBT will be installed automatically");
             installAndPatchSbt();
@@ -105,12 +106,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     @NotNull
     private String getAutoInstallSbtFolder() {
-        return getWorkingDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
+        return getAgentTempDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
     }
 
     @NotNull
     private String getAutoInstallSbtGlobalsFolder() {
-        return getWorkingDirectory() + File.separator + SBT_AUTO_GLOBALS_FOLDER;
+        return getAgentTempDirectory() + File.separator + SBT_AUTO_GLOBALS_FOLDER;
     }
 
     private void installAndPatchSbt() {
