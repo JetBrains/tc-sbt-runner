@@ -1,7 +1,7 @@
 package jetbrains.buildServer.sbt;
 
-import com.sun.xml.internal.rngom.ast.builder.BuildException;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.impl.BuildAgentStartFailedException;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
@@ -124,7 +124,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         } catch (Exception e) {
             getLogger().error(e.getMessage());
             getLogger().buildFailureDescription("An error occurred during SBT installation");
-            throw new BuildException(e);
+            throw new IllegalStateException(e);
         } finally {
             getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
         }
