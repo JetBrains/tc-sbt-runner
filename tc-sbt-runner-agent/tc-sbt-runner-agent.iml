@@ -45,7 +45,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:openapi:95.677" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:util:95.677" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:resources_en:95.677" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.jetbrains:agent:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.jetbrains:agent:8.1-local" level="project" />
   </component>
 </module>
 

@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.jetbrains</groupId>
             <artifactId>agent</artifactId>
-            <version>1.0</version>
+            <version>8.1-local</version>
             <scope>provided</scope>
         </dependency>
 
