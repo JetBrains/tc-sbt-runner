@@ -4,13 +4,12 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
+import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 import java.util.jar.JarFile;
 
@@ -20,11 +19,11 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String SBT_PATCH_JAR_NAME = "sbt-teamcity-logger.jar";
 
-    private static final String AUTO_INSTALL_FOLDER = "tc-sbt";
+    private static final String SBT_DISTRIB = "sbt-distrib";
 
-    private static final String AUTO_INSTALL_GLOBALS_FOLDER = "tc-sbt-globals";
+    private static final String SBT_AUTO_HOME_FOLDER = "tc-sbt";
 
-    private static final String AUTO_INSTALL_FLAG = "auto";
+    private static final String SBT_AUTO_GLOBALS_FOLDER = "tc-sbt-globals";
 
 
     private final static String[] SBT_JARS = new String[]{
@@ -61,6 +60,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @NotNull
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
+
 
         if (isAutoInstallMode()) {
             getLogger().message("SBT will be installed automatically");
@@ -106,30 +106,19 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     @NotNull
     private String getAutoInstallSbtFolder() {
-        return getWorkingDirectory() + File.separator + AUTO_INSTALL_FOLDER;
+        return getAgentTempDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
     }
 
     @NotNull
     private String getAutoInstallSbtGlobalsFolder() {
-        return getWorkingDirectory() + File.separator + AUTO_INSTALL_GLOBALS_FOLDER;
+        return getAgentTempDirectory() + File.separator + SBT_AUTO_GLOBALS_FOLDER;
     }
 
     private void installAndPatchSbt() {
-        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_LAUNCHER_JAR_NAME, getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME);
-        copyFiles(AUTO_INSTALL_FOLDER + File.separator + SBT_PATCH_JAR_NAME, getAutoInstallSbtGlobalsFolder() + File.separator
-                + "lib" + File.separator + SBT_PATCH_JAR_NAME);
+        FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME));
+        FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_PATCH_JAR_NAME, new File(getAutoInstallSbtGlobalsFolder() + File.separator + "lib" + File.separator + SBT_PATCH_JAR_NAME));
     }
 
-
-    private void copyFiles(@NotNull String name, @NotNull String destination) {
-        try {
-            URL inputUrl = getClass().getClassLoader().getResource(name);
-            getLogger().message(String.format("Copying from %s to %s", name, destination));
-            FileUtils.copyURLToFile(inputUrl, new File(destination));
-        } catch (IOException e) {
-            getLogger().error(e.getMessage());
-        }
-    }
 
     @NotNull
     private String getMainClassName() throws RunBuildException {
@@ -201,9 +190,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         return userSbtFolder;
     }
 
-    private boolean isAutoInstallMode(){
+    private boolean isAutoInstallMode() {
         String sbtInstallationMode = getRunnerParameters().get(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM);
-        return AUTO_INSTALL_FLAG.equalsIgnoreCase(sbtInstallationMode);
+        return SbtRunnerConstants.AUTO_INSTALL_FLAG.equalsIgnoreCase(sbtInstallationMode);
     }
 
     @NotNull

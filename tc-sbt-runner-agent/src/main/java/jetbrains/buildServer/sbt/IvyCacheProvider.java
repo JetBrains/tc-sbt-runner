@@ -11,39 +11,39 @@ import java.io.File;
 import java.util.Date;
 import java.util.logging.Logger;
 
-public class IvyCacheProvider {
+public class IvyCacheProvider implements DirectoryCleanersProvider {
 
     private static final Logger LOG = Logger.getLogger(IvyCacheProvider.class.getName());
 
     private final File myCacheDir;
 
-    public IvyCacheProvider(@NotNull BuildAgentConfiguration agentConfiguration, @NotNull ExtensionHolder extensionHolder) {
+    public IvyCacheProvider(@NotNull BuildAgentConfiguration agentConfiguration) {
         LOG.info("IvyCacheProvider.constructor");
         myCacheDir = agentConfiguration.getCacheDirectory("sbt_ivy");
-        extensionHolder.registerExtension(DirectoryCleanersProvider.class, getClass().getName(), new DirectoryCleanersProvider() {
-            @NotNull
-            public String getCleanerName() {
-                return "Sbt Ivy cache cleaner";
-            }
-
-            public void registerDirectoryCleaners(@NotNull final DirectoryCleanersProviderContext context,
-                                                  @NotNull final DirectoryCleanersRegistry registry) {
-                File curCacheDir = new File(getCacheDir(), "cache");
-                if (curCacheDir.isDirectory()) {
-                    File[] subDirs = curCacheDir.listFiles();
-                    if (subDirs != null) {
-                        for (File dir : subDirs) {
-                            if (!dir.isDirectory()) continue;
-                            registry.addCleaner(dir, new Date(dir.lastModified()));
-                        }
-                    }
-                }
-            }
-        });
     }
 
     @NotNull
     public File getCacheDir() {
         return myCacheDir;
+    }
+
+    @NotNull
+    public String getCleanerName() {
+        return "Sbt Ivy cache cleaner";
+    }
+
+    public void registerDirectoryCleaners(@NotNull DirectoryCleanersProviderContext directoryCleanersProviderContext,
+                                          @NotNull DirectoryCleanersRegistry registry) {
+        File curCacheDir = new File(getCacheDir(), "cache");
+        if (curCacheDir.isDirectory()) {
+            File[] subDirs = curCacheDir.listFiles();
+            if (subDirs != null) {
+                for (File dir : subDirs) {
+                    if (!dir.isDirectory()) continue;
+                    registry.addCleaner(dir, new Date(dir.lastModified()));
+                }
+            }
+        }
+
     }
 }

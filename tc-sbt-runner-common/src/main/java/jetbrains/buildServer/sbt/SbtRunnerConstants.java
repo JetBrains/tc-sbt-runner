@@ -9,4 +9,6 @@ public interface SbtRunnerConstants {
   String SBT_ARGS_PARAM = "sbt.args";
   String SBT_INSTALLATION_MODE_PARAM = "sbt.installationMode";
 
+  public static final String AUTO_INSTALL_FLAG = "auto";
+
 }
