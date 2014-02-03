@@ -21,7 +21,14 @@
         <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>server-api</artifactId>
-            <version>${teamcity-version}</version>
+            <version>8.1-local</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>common-api</artifactId>
+            <version>8.1-local</version>
             <scope>provided</scope>
         </dependency>
 
@@ -42,6 +49,13 @@
         <dependency>
             <groupId>org.jetbrains.teamcity.idea</groupId>
             <artifactId>util</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity.idea</groupId>
+            <artifactId>annotations</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
