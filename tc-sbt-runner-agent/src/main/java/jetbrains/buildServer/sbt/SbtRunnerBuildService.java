@@ -1,5 +1,6 @@
 package jetbrains.buildServer.sbt;
 
+import com.sun.xml.internal.rngom.ast.builder.BuildException;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
@@ -30,6 +31,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             SBT_LAUNCHER_JAR_NAME,
             "classes"
     };
+    public static final String BUILD_ACTIVITY_TYPE = "BUILD_ACTIVITY_TYPE";
+
     private final IvyCacheProvider myIvyCacheProvider;
 
     public SbtRunnerBuildService(IvyCacheProvider ivyCacheProvider) {
@@ -61,12 +64,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
 
-
-        if (isAutoInstallMode()) {
-            getLogger().message("SBT will be installed automatically");
-            installAndPatchSbt();
-            getLogger().message("SBT successfully installed");
-        }
+        String mainClassName = isAutoInstallMode() ? installAndPatchSbt() : getMainClassName();
 
         JavaCommandLineBuilder cliBuilder = new JavaCommandLineBuilder();
         String javaHome = getRunnerParameters().get(JavaRunnerConstants.TARGET_JDK_HOME);
@@ -81,7 +79,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
         cliBuilder.setJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerParameters()));
         cliBuilder.setClassPath(getClasspath());
-        cliBuilder.setMainClass(getMainClassName());
+        cliBuilder.setMainClass(mainClassName);
 
         List<String> programParameters = getProgramParameters();
         if (isAutoInstallMode()) {
@@ -106,19 +104,32 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     @NotNull
     private String getAutoInstallSbtFolder() {
-        return getAgentTempDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
+        return getWorkingDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
     }
 
     @NotNull
     private String getAutoInstallSbtGlobalsFolder() {
-        return getAgentTempDirectory() + File.separator + SBT_AUTO_GLOBALS_FOLDER;
+        return getWorkingDirectory() + File.separator + SBT_AUTO_GLOBALS_FOLDER;
     }
 
-    private void installAndPatchSbt() {
-        FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME));
-        FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_PATCH_JAR_NAME, new File(getAutoInstallSbtGlobalsFolder() + File.separator + "lib" + File.separator + SBT_PATCH_JAR_NAME));
-    }
+    private String installAndPatchSbt() {
+        try {
+            getLogger().activityStarted("SBT installation", "'Auto' installation mode was picked in SBT runner settings", BUILD_ACTIVITY_TYPE);
+            FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_LAUNCHER_JAR_NAME,
+                    new File(getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME));
+            FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_PATCH_JAR_NAME,
+                    new File(getAutoInstallSbtGlobalsFolder() + File.separator + "lib" + File.separator + SBT_PATCH_JAR_NAME));
+            getLogger().message("SBT home: " + getSbtHome());
+            return getMainClassName();
+        } catch (Exception e) {
+            getLogger().error(e.getMessage());
+            getLogger().buildFailureDescription("An error occurred during SBT installation");
+            throw new BuildException(e);
+        } finally {
+            getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
+        }
 
+    }
 
     @NotNull
     private String getMainClassName() throws RunBuildException {
