@@ -1,7 +1,6 @@
 package jetbrains.buildServer.sbt;
 
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.impl.BuildAgentStartFailedException;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
@@ -22,9 +21,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String SBT_DISTRIB = "sbt-distrib";
 
-    private static final String SBT_AUTO_HOME_FOLDER = "tc-sbt";
-
-    private static final String SBT_AUTO_GLOBALS_FOLDER = "tc-sbt-globals";
+    private static final String SBT_AUTO_HOME_FOLDER = "agent-sbt";
 
 
     private final static String[] SBT_JARS = new String[]{
@@ -95,7 +92,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private List<String> addDirectoriesParameters(@NotNull List<String> programParameters) {
         List<String> params = new ArrayList<String>();
         params.add(String.format("-Dsbt.global.base=%s", getAutoInstallSbtFolder()));
-        params.add(String.format("-Dsbt.global.plugins=%s", getAutoInstallSbtGlobalsFolder()));
         params.addAll(programParameters);
         //-Dsbt.log.format=false
         return params;
@@ -104,22 +100,27 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     @NotNull
     private String getAutoInstallSbtFolder() {
-        return getWorkingDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
+        return getAgentTempDirectory() + File.separator + SBT_AUTO_HOME_FOLDER;
     }
 
-    @NotNull
-    private String getAutoInstallSbtGlobalsFolder() {
-        return getWorkingDirectory() + File.separator + SBT_AUTO_GLOBALS_FOLDER;
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void copyResources(String sourcePathInJar, String sourceName, File destinationDir) {
+        destinationDir.mkdirs();
+        File destination = new File(destinationDir, sourceName);
+        FileUtil.copyResource(this.getClass(), sourcePathInJar + sourceName, destination);
+        boolean done = destination.exists() && destination.isFile();
+        if (done) {
+            getLogger().message("Resource was copied to: " + destination);
+        }
     }
 
     private String installAndPatchSbt() {
         try {
-            getLogger().activityStarted("SBT installation", "'Auto' installation mode was picked in SBT runner settings", BUILD_ACTIVITY_TYPE);
-            FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_LAUNCHER_JAR_NAME,
-                    new File(getAutoInstallSbtFolder() + File.separator + "bin" + File.separator + SBT_LAUNCHER_JAR_NAME));
-            FileUtil.copyResource(this.getClass(), "/" + SBT_DISTRIB + "/" + SBT_PATCH_JAR_NAME,
-                    new File(getAutoInstallSbtGlobalsFolder() + File.separator + "lib" + File.separator + SBT_PATCH_JAR_NAME));
-            getLogger().message("SBT home: " + getSbtHome());
+            getLogger().activityStarted("SBT installation", "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
+            getLogger().message("SBT will be install to: " + getAutoInstallSbtFolder());
+            copyResources("/" + SBT_DISTRIB + "/", SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin"));
+            copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "plugins" + File.separator + "lib"));
+            getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
         } catch (Exception e) {
             getLogger().error(e.getMessage());
@@ -135,7 +136,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private String getMainClassName() throws RunBuildException {
         try {
             File sbtLauncher = getSbtLauncher();
-            getLogger().message("Retrieve SBT main class name from: " + sbtLauncher);
+            getLogger().message("SBT main class name will be retrieved from: " + sbtLauncher);
             JarFile jf = new JarFile(sbtLauncher);
             return jf.getManifest().getMainAttributes().getValue("Main-Class");
         } catch (IOException e) {
@@ -152,7 +153,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
 
     @NotNull
-    private ProgramCommandLine buildCommandline(@NotNull final JavaCommandLineBuilder cliBuilder) throws RunBuildException {
+    private ProgramCommandLine buildCommandline(@NotNull final JavaCommandLineBuilder cliBuilder) throws
+            RunBuildException {
         try {
             return cliBuilder.build();
         } catch (CannotBuildCommandLineException e) {
