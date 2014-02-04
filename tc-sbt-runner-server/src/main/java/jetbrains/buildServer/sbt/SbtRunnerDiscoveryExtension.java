@@ -11,6 +11,16 @@ import java.util.List;
 
 public class SbtRunnerDiscoveryExtension extends BreadthFirstRunnerDiscoveryExtension {
 
+    private SbtRunnerRunType sbtRunnerRunType;
+
+    public SbtRunnerDiscoveryExtension(SbtRunnerRunType sbtRunnerRunType) {
+        this.sbtRunnerRunType = sbtRunnerRunType;
+    }
+
+    public SbtRunnerDiscoveryExtension(int depthLimit, SbtRunnerRunType sbtRunnerRunType) {
+        super(depthLimit);
+        this.sbtRunnerRunType = sbtRunnerRunType;
+    }
 
     @NotNull
     @Override
@@ -18,7 +28,7 @@ public class SbtRunnerDiscoveryExtension extends BreadthFirstRunnerDiscoveryExte
         List<DiscoveredObject> res = new ArrayList<DiscoveredObject>();
         for (Element file : filesAndDirs) {
             if (file.isLeaf() && file.getName().endsWith(".sbt")) {
-                res.add(new DiscoveredObject(SbtRunnerConstants.RUNNER_TYPE, Collections.<String, String>emptyMap()));
+                res.add(new DiscoveredObject(SbtRunnerConstants.RUNNER_TYPE, sbtRunnerRunType.getDefaultRunnerProperties()));
             }
         }
         return res;

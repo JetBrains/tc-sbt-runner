@@ -1,12 +1,12 @@
 package jetbrains.buildServer.sbt;
 
-import java.util.*;
-
 import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.requirements.Requirement;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
 
 public class SbtRunnerRunType extends RunType {
 
@@ -52,6 +52,16 @@ public class SbtRunnerRunType extends RunType {
 
     @Override
     public Map<String, String> getDefaultRunnerProperties() {
+        return new HashMap<String, String>() {{
+            put(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
+            put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "Auto");
+            put("target.jdk.home", "%env.JDK_16%");
+            put("jvmArgs", DEFAULT_SBT_JVM_ARGS);
+        }};
+    }
+
+
+    public static Map<String, String> getDefaultProperties() {
         return new HashMap<String, String>() {{
             put(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
             put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "Auto");
