@@ -4,9 +4,8 @@
   <info>
     <name>sbt-runner</name>
     <display-name>Simple Build Tool (Scala)</display-name>
-    <version>1.0</version>
+    <version>@Version@</version>
     <description>Scala Simple Build Tool Runner</description>
-
     <vendor>
       <name>JetBrains, s.r.o.</name>
       <url>http://www.jetbrains.com</url>
