@@ -2,6 +2,7 @@ package jetbrains.buildServer.sbt;
 
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.runner.*;
+import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
@@ -123,8 +124,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
         } catch (Exception e) {
-            getLogger().error(e.getMessage());
-            getLogger().buildFailureDescription("An error occurred during SBT installation");
+            getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE,"An error occurred during SBT installation",e);
             throw new IllegalStateException(e);
         } finally {
             getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
