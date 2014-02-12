@@ -22,14 +22,14 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span class="smallNote">In 'Auto' mode the latest SBT version will be automatically downloaded, installed and prepared for work with TeamCity</span>
+            <span class="smallNote">In 'Auto' mode the latest SBT version will be automatically installed</span>
         </td>
     </tr>
     <tr id="sbt.home_selection">
         <th><label for="sbt.home">SBT home path:<l:star/></label></th>
         <td>
             <props:textProperty name="sbt.home" className="longField"/>
-            <span class="smallNote">Path to existed SBT directory</span>
+            <span class="smallNote">Path to existed SBT directory. Ensure <a href="https://github.com/JetBrains/sbt-tc-logger">SBT TeamCity logger</a> is added</span>
             <span class="error" id="error_sbt.home"></span>
         </td>
     </tr>
