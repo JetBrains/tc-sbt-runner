@@ -22,7 +22,7 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span class="smallNote">In 'Auto' mode the latest SBT version will be automatically installed</span>
+            <span id="sbt_installation_info" class="smallNote">In 'Auto' mode the latest SBT version will be automatically installed</span>
         </td>
     </tr>
     <tr id="sbt.home_selection">
@@ -39,9 +39,11 @@
         window.syncSBTInstMode = function () {
             if ($("sbtInstallationSelection").value == 'custom') {
                 BS.Util.show("sbt.home_selection");
+                $("sbt_installation_info").innerHTML = "In 'Custom' mode sbt-launch.jar from \\bin folder under SBT home will be launched"
             }
             else {
                 BS.Util.hide("sbt.home_selection");
+                $("sbt_installation_info").innerHTML = "In 'Auto' mode the latest SBT version will be automatically installed"
             }
             BS.MultilineProperties.updateVisible();
         };
