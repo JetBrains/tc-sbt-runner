@@ -1,6 +1,7 @@
 package jetbrains.buildServer.sbt;
 
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
@@ -63,16 +64,20 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
 
         String mainClassName = isAutoInstallMode() ? installAndPatchSbt() : getMainClassName();
+        String javaHome = getJavaHome();
+        String sbtHome = getSbtHome();
+        getLogger().message("Java home set to: " + javaHome);
+        getLogger().message("SBT home set to: " + sbtHome);
 
         JavaCommandLineBuilder cliBuilder = new JavaCommandLineBuilder();
-        String javaHome = getRunnerParameters().get(JavaRunnerConstants.TARGET_JDK_HOME);
         cliBuilder.setJavaHome(javaHome);
         cliBuilder.setBaseDir(getCheckoutDirectory().getAbsolutePath());
 
         cliBuilder.setSystemProperties(getVMProperties());
         Map<String, String> envVars = new HashMap<String, String>(getEnvironmentVariables());
-        envVars.put("SBT_HOME", getSbtHome());
-        envVars.put("JAVA_HOME", javaHome);
+
+        envVars.put(SbtRunnerConstants.SBT_HOME, sbtHome);
+        envVars.put(JavaRunnerConstants.JAVA_HOME, sbtHome);
         cliBuilder.setEnvVariables(envVars);
 
         cliBuilder.setJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerParameters()));
@@ -98,6 +103,14 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         return params;
     }
 
+    private String getJavaHome() throws RunBuildException {
+        String javaHome = JavaRunnerUtil.findJavaHome(getRunnerParameters().get(JavaRunnerConstants.TARGET_JDK_HOME),
+                getBuildParameters().getAllParameters(),
+                AgentRuntimeProperties.getCheckoutDir(getRunnerParameters()));
+        if (javaHome == null) throw new RunBuildException("Unable to find Java home");
+        javaHome = FileUtil.getCanonicalFile(new File(javaHome)).getPath();
+        return javaHome;
+    }
 
     @NotNull
     private String getAutoInstallSbtFolder() {
