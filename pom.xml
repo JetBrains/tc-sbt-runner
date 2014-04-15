@@ -40,5 +40,6 @@
         <module>tc-sbt-runner-agent</module>
         <module>tc-sbt-runner-common</module>
         <module>build</module>
+        <module>tests</module>
     </modules>
 </project>

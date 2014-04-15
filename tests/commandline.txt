@@ -1,0 +1,41 @@
+Starting: C:\java\jdk1.6.0_35\bin\java.exe
+-Dagent.home.dir=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug
+-Dagent.name=Debug-Agent -Dagent.ownPort=9090 -Dagent.work.dir=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\work -Dbuild.number=4 -Dbuild.vcs.number=35cfda5101c2ff7a9d397703fc7e01f5ea517ce2 -Dbuild.vcs.number.1=35cfda5101c2ff7a9d397703fc7e01f5ea517ce2 -Dbuild.vcs.number.sbtlogger=35cfda5101c2ff7a9d397703fc7e01f5ea517ce2 -Djava.io.tmpdir=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp -Dsbt.ivy.home=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\system\sbt_ivy -Dteamcity.agent.dotnet.agent_url=http://localhost:9090/RPC2 -Dteamcity.agent.dotnet.build_id=4 -Dteamcity.auth.password=EuIVWtVOHldlheENApqPyjLTShvDB0wo -Dteamcity.auth.userId=TeamCityBuildId=4 -Dteamcity.build.changedFiles.file=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp\changedFiles3289315969354933054.txt -Dteamcity.build.checkoutDir=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\work\b4943a282bd59e7a -Dteamcity.build.id=4 -Dteamcity.build.properties.file=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp\teamcity.build2456049080610093662.properties -Dteamcity.build.tempDir=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp -Dteamcity.build.workingDir=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\work\b4943a282bd59e7a -Dteamcity.buildConfName=sbt-tc-logger -Dteamcity.buildType.id=Project1_SbtTcLogger -Dteamcity.configuration.properties.file=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp\teamcity.config5269690626070741446.properties -Dteamcity.dotnet.nunitaddin=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.TeamCity.NUnitAddin-NUnit -Dteamcity.dotnet.nunitlauncher=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.BuildServer.NUnitLauncher.exe -Dteamcity.dotnet.nunitlauncher.msbuild.task=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.BuildServer.MSBuildLoggers.dll -Dteamcity.dotnet.nunitlauncher1.1=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.BuildServer.NUnitLauncher1.1.exe -Dteamcity.dotnet.nunitlauncher2.0=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.BuildServer.NUnitLauncher2.0.exe -Dteamcity.dotnet.nunitlauncher2.0.vsts=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.BuildServer.NUnitLauncher2.0.VSTS.exe -Dteamcity.dotnet.platform=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\plugins\dotnetPlugin\bin\JetBrains.TeamCity.PlatformProcessRunner.1.1.exe -Dteamcity.idea.home=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug/plugins/idea -Dteamcity.projectName=project1 -Dteamcity.runner.properties.file=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp\teamcity.runner3079972950332032325.properties -Dteamcity.tests.recentlyFailedTests.file=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\buildTmp\testsToRunFirst630494752379756729.txt "-Dteamcity.version=8.1 EAP (build SNAPSHOT)"
+-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m -Dsbt.log.format=false
+-classpath C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\agentTmp\agent-sbt\bin\sbt-launch.jar;C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\agentTmp\agent-sbt\bin\classes;
+xsbt.boot.Boot
+-Dsbt.global.base=C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\temp\agentTmp\agent-sbt
+clean compile assembly test
+[09:42:20][Step 1/1] in directory: C:\work\TeamServer\BuildServer\.idea_artifacts\agent_deployment_debug\work\b4943a282bd59e7a
+
+
+Starting: /usr/lib/jvm/java-8-oracle/bin/java
+-Dagent.home.dir=/home/teamcity/TeamCity/buildAgent
+-Dagent.name=Default Agent -Dagent.ownPort=9090
+-Dagent.work.dir=/home/teamcity/TeamCity/buildAgent/work
+-Dbuild.number=6 -Dbuild.vcs.number=6e4dfc9a262eb1f070b6eac5a030ce806ec2b784
+-Dbuild.vcs.number.1=6e4dfc9a262eb1f070b6eac5a030ce806ec2b784
+-Dbuild.vcs.number.Insightware_BitbucketRepository=6e4dfc9a262eb1f070b6eac5a030ce806ec2b784
+-Djava.io.tmpdir=/home/teamcity/TeamCity/buildAgent/temp/buildTmp
+-Dsbt.ivy.home=/home/teamcity/TeamCity/buildAgent/system/sbt_ivy
+-Dteamcity.agent.cpuBenchmark=618
+-Dteamcity.agent.dotnet.agent_url=http://localhost:9090/RPC2
+-Dteamcity.agent.dotnet.build_id=6
+-Dteamcity.auth.password=ZPrsnUQUbLYtdiRbALna6nMNLDNQIFFI
+-Dteamcity.auth.userId=TeamCityBuildId=6
+-Dteamcity.build.changedFiles.file=/home/teamcity/TeamCity/buildAgent/temp/buildTmp/changedFiles3019658820987789749.txt
+-Dteamcity.build.checkoutDir=/home/teamcity/TeamCity/buildAgent/work/5c9d9f1c38135e18
+-Dteamcity.build.id=6 -Dteamcity.build.properties.file=/home/teamcity/TeamCity/buildAgent/temp/buildTmp/teamcity.build4668139584505453969.properties
+-Dteamcity.build.tempDir=/home/teamcity/TeamCity/buildAgent/temp/buildTmp -Dteamcity.build.workingDir=/home/teamcity/TeamCity/buildAgent/work/5c9d9f1c38135e18
+-Dteamcity.buildConfName=JustATest -Dteamcity.buildType.id=Insightware_JustATest
+-Dteamcity.configuration.properties.file=/home/teamcity/TeamCity/buildAgent/temp/buildTmp/teamcity.config1692606008787601957.properties
+-Dteamcity.projectName=Insightware -Dteamcity.runner.properties.file=/home/teamcity/TeamCity/buildAgent/temp/buildTmp/teamcity.runner7315702336028116209.properties
+-Dteamcity.tests.recentlyFailedTests.file=/home/teamcity/TeamCity/buildAgent/temp/buildTmp/testsToRunFirst4545366867117349520.txt
+-Dteamcity.version=8.1 (build 29879)
+-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m -Dsbt.log.format=false
+-classpath /home/teamcity/TeamCity/buildAgent/temp/agentTmp/agent-sbt/bin/sbt-launch.jar:/home/teamcity/TeamCity/buildAgent/temp/agentTmp/agent-sbt/bin/classes:
+xsbt.boot.Boot
+-Dsbt.global.base=/home/teamcity/TeamCity/buildAgent/temp/agentTmp/agent-sbt
+clean compile test
+[Step 1/1] in directory: /home/teamcity/TeamCity/buildAgent/work/5c9d9f1c38135e18
+
