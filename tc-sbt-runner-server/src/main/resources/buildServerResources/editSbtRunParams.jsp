@@ -10,7 +10,7 @@
             <label for="sbt.args">SBT commands:</label>
         </th>
         <td>
-            <props:textProperty name="sbt.args" className="longField"/>
+            <props:textProperty name="sbt.args" className="longField" expandable="true"/>
             <span class="smallNote">Commands to execute.</span>
         </td>
     </tr>
