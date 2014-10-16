@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.jar.JarFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SbtRunnerBuildService extends BuildServiceAdapter {
 
@@ -32,6 +34,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     };
     public static final String BUILD_ACTIVITY_TYPE = "BUILD_ACTIVITY_TYPE";
 
+    public static final Pattern LINES_TO_EXCLUDE = Pattern.compile("^\\[(info|warn|error|debug)\\]",
+            Pattern.CASE_INSENSITIVE + Pattern.MULTILINE);
+
     private final IvyCacheProvider myIvyCacheProvider;
 
     public SbtRunnerBuildService(IvyCacheProvider ivyCacheProvider) {
@@ -44,6 +49,13 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         return Collections.<ProcessListener>singletonList(new ProcessListenerAdapter() {
             @Override
             public void onStandardOutput(@NotNull String line) {
+                Matcher matcher = LINES_TO_EXCLUDE.matcher(line);
+                if (matcher.matches()) {
+                    //we don't want to duplicate lines
+                    //all normal log messages will be wrapped in TeamCity service messages by sbt-tc-logger
+                    //so output from other loggers could be ignored
+                    return;
+                }
                 getLogger().message(line);
             }
 
@@ -137,7 +149,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
         } catch (Exception e) {
-            getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE,"An error occurred during SBT installation",e);
+            getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
             throw new IllegalStateException(e);
         } finally {
             getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
