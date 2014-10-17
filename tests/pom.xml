@@ -304,7 +304,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
+            <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>jdom</artifactId>
             <version>8.1.5-local</version>
         </dependency>

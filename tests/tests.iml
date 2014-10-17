@@ -119,7 +119,7 @@
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.0" level="project" />
     <orderEntry type="library" name="Maven: net.sf.trove4j:trove4j:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.teamcity:jdom:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:jdom:8.1.5-local" level="project" />
     <orderEntry type="library" name="Maven: jaxen:jaxen:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: jdom:jdom:1.0" level="project" />
