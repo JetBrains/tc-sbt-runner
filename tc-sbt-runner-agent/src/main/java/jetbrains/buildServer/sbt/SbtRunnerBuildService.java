@@ -50,7 +50,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             @Override
             public void onStandardOutput(@NotNull String line) {
                 Matcher matcher = LINES_TO_EXCLUDE.matcher(line);
-                if (matcher.matches()) {
+                if (matcher.find()) {
                     //we don't want to duplicate lines
                     //all normal log messages will be wrapped in TeamCity service messages by sbt-tc-logger
                     //so output from other loggers could be ignored
