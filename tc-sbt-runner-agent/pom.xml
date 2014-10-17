@@ -71,7 +71,7 @@
 
 
         <dependency>
-            <groupId>com.jetbrains</groupId>
+            <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>agent</artifactId>
             <version>8.1.5-local</version>
             <scope>provided</scope>
