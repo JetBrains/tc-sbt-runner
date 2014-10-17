@@ -52,6 +52,7 @@ public class SbtRunnerTest extends RunnerTest2Base {
 
     }
 
+    @Test
     public void testAutoInstallation() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
         setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile test");
@@ -63,27 +64,42 @@ public class SbtRunnerTest extends RunnerTest2Base {
         Assert.assertTrue(build.getBuildStatus().isSuccessful());
     }
 
+
     @Test
     public void testCompileError() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
-        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile test");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("compileerror").getPath());
         setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
         dumpBuildLogLocally(build);
+        Assert.assertTrue(getBuildLog(build).contains("Invalid literal number"));
         Assert.assertTrue(build.getBuildStatus().isFailed());
         Assert.assertEquals(build.getFailureReasons().get(0).getDescription(), "Compilation error: Scala compiler");
     }
 
 
-    public void testCompileSubProject() throws Throwable {
+    @Test
+    public void testCompileSubProject_1() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
-        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "backend/compile");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean backend/compile");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("subproject").getPath());
         setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
         dumpBuildLogLocally(build);
         Assert.assertTrue(build.getBuildStatus().isSuccessful());
+    }
+
+    @Test
+    public void testCompileSubProject_2() throws Throwable {
+        setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean backendWE/compile");
+        setRunnerParameter("teamcity.build.workingDir", getTestDataPath("subproject").getPath());
+        setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
+        final SFinishedBuild build = doTest(null);
+        dumpBuildLogLocally(build);
+        Assert.assertTrue(getBuildLog(build).contains("Invalid literal number"));
+        Assert.assertTrue(build.getBuildStatus().isFailed());
     }
 
 
