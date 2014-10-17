@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.jetbrains.teamcity</groupId>
+  <artifactId>server</artifactId>
+  <versioning>
+    <release>8.1.5-local</release>
+    <versions>
+      <version>8.1.5-local</version>
+    </versions>
+    <lastUpdated>20141017134121</lastUpdated>
+  </versioning>
+</metadata>
