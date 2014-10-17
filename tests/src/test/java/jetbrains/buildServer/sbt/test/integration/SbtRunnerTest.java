@@ -3,6 +3,7 @@ package jetbrains.buildServer.sbt.test.integration;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.sbt.SbtRunnerConstants;
+import jetbrains.buildServer.sbt.SbtRunnerRunType;
 import jetbrains.buildServer.serverSide.SFinishedBuild;
 import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
@@ -51,28 +52,38 @@ public class SbtRunnerTest extends RunnerTest2Base {
 
     }
 
-
-    @Test
     public void testAutoInstallation() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
         setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile test");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("base").getPath());
+        setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
         dumpBuildLogLocally(build);
         Assert.assertTrue(getBuildLog(build).contains("SBT installation"));
         Assert.assertTrue(build.getBuildStatus().isSuccessful());
     }
 
-
     @Test
     public void testCompileError() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
         setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile test");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("compileerror").getPath());
+        setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
         dumpBuildLogLocally(build);
         Assert.assertTrue(build.getBuildStatus().isFailed());
         Assert.assertEquals(build.getFailureReasons().get(0).getDescription(), "Compilation error: Scala compiler");
+    }
+
+
+    public void testCompileSubProject() throws Throwable {
+        setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "backend/compile");
+        setRunnerParameter("teamcity.build.workingDir", getTestDataPath("subproject").getPath());
+        setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
+        final SFinishedBuild build = doTest(null);
+        dumpBuildLogLocally(build);
+        Assert.assertTrue(build.getBuildStatus().isSuccessful());
     }
 
 
