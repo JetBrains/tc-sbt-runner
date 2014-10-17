@@ -28,6 +28,11 @@ public class OutputFilterTest {
     }
 
     @Test
+    public void checkLineExcludePattern_5() {
+        Assert.assertTrue(checkFind("[info] Loading global plugins from /private/var/folders/9t/wh8psrsd0jg5z8h7wp_ss39h0000gn/T/test-2137710771/agentTmp/agent-sbt/plugins"));
+    }
+
+    @Test
     public void checkLineExcludePattern_Info() {
         Assert.assertTrue(checkFind("[info] checking for changes"));
     }
@@ -36,6 +41,7 @@ public class OutputFilterTest {
     public void checkLineExcludePattern_Debug() {
         Assert.assertTrue(checkFind("[debug] All initially invalidated sources: Set()"));
     }
+
 
     @Test
     public void checkLineExcludePattern_DebugMultiLine() {
