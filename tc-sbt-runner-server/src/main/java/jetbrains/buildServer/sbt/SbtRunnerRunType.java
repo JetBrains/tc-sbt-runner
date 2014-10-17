@@ -13,7 +13,7 @@ public class SbtRunnerRunType extends RunType {
 
     public static final String DEFAULT_SBT_JVM_ARGS = TeamCityProperties.
             getProperty("teamcity.sbt.defaultJvmArgs", "-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m " +
-                    "-Dsbt.log.format=false");
+                    "-Dsbt.log.noformat=true");
     private PluginDescriptor myPluginDescriptor;
 
     public SbtRunnerRunType(@NotNull final RunTypeRegistry runTypeRegistry,
@@ -63,8 +63,8 @@ public class SbtRunnerRunType extends RunType {
 
     public static Map<String, String> getDefaultProperties() {
         return new HashMap<String, String>() {{
-            put(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
-            put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "Auto");
+            put(SbtRunnerConstants.SBT_ARGS_PARAM, SbtRunnerConstants.SBT_ARGS);
+            put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, SbtRunnerConstants.SBT_DEFAULT_INSTALLATION_MODE);
             put("target.jdk.home", "%env.JDK_16%");
             put("jvmArgs", DEFAULT_SBT_JVM_ARGS);
         }};

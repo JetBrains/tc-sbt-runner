@@ -13,4 +13,7 @@ public interface SbtRunnerConstants {
   public static final String AUTO_INSTALL_FLAG = "auto";
 
   String SBT_HOME = "SBT_HOME";
+  String SBT_ARGS = "clean compile test";
+  String SBT_DEFAULT_INSTALLATION_MODE = "Auto";
+  String SBT_CUSTOM_INSTALLATION_MODE = "Custom";
 }
