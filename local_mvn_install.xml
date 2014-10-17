@@ -1,0 +1,237 @@
+<project name="installer" default="copy all" >
+    <description>
+        Install specific jars to local maven repo
+    </description>
+
+    <property name="tc.dir" value="/Users/shkate/Downloads/TeamCity/"/>
+    <property name="local.repo" value="/Users/shkate/Work/tc-sbt-runner/repo"/>
+    <property name="version" value="8.1.5-local"/>
+
+    <target name="common-api">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/devPackage/common-api.jar"/>
+            <arg value="-DartifactId=common-api"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="agent">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/agent.jar"/>
+            <arg value="-DartifactId=agent"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="tests-integration">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/devPackage/tests/tests-integration.jar"/>
+            <arg value="-DartifactId=tests-integration"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="common-impl">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/common-impl.jar"/>
+            <arg value="-DartifactId=common-impl"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="server">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/server.jar"/>
+            <arg value="-DartifactId=server"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="agent-upgrade-server">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/agent-upgrade.jar"/>
+            <arg value="-DartifactId=agent-upgrade-server"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="agent-upgrade">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/agent-upgrade.jar"/>
+            <arg value="-DartifactId=agent-upgrade"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="issue-tracker-impl">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/issue-tracker-impl.jar"/>
+            <arg value="-DartifactId=issue-tracker-impl"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="patches-impl">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/patches-impl.jar"/>
+            <arg value="-DartifactId=patches-impl"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="remote-api-impl">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/remote-api-impl.jar"/>
+            <arg value="-DartifactId=remote-api-impl"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+
+    <target name="cl">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/cl.jar"/>
+            <arg value="-DartifactId=cl"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="db">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/db.jar"/>
+            <arg value="-DartifactId=db"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="hsqldb">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/hsqldb.jar"/>
+            <arg value="-DartifactId=hsqldb"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="agent-launcher">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/agent-launcher.jar"/>
+            <arg value="-DartifactId=agent-launcher"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="server-logging">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/server-logging.jar"/>
+            <arg value="-DartifactId=server-logging"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="launcher-api">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/launcher-api.jar"/>
+            <arg value="-DartifactId=launcher-api"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+    <target name="jdom">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/jdom.jar"/>
+            <arg value="-DartifactId=jdom"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
+
+    <target name="copy all" depends="jdom,common-api,server,tests-integration, common-impl, launcher-api,
+    server-logging, agent-launcher, hsqldb, db, remote-api-impl,agent,agent-upgrade-server, agent-upgrade, cl, issue-tracker-impl,patches-impl">
+        <echo message="All is done!"/>
+    </target>
+
+
+</project>

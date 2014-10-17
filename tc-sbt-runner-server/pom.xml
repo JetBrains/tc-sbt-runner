@@ -21,14 +21,14 @@
         <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>server-api</artifactId>
-            <version>8.1-local</version>
+            <version>${teamcity-version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>common-api</artifactId>
-            <version>8.1-local</version>
+            <version>${teamcity-version}</version>
             <scope>provided</scope>
         </dependency>
 
