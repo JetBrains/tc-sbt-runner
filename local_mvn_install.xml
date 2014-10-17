@@ -1,4 +1,4 @@
-<project name="installer" default="copy all" >
+<project name="jar-installer" default="copy all" >
     <description>
         Install specific jars to local maven repo
     </description>
