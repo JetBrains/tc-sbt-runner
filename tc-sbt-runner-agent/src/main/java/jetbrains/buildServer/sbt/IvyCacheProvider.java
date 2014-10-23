@@ -1,15 +1,15 @@
 package jetbrains.buildServer.sbt;
 
-import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.DirectoryCleanersProvider;
 import jetbrains.buildServer.agent.DirectoryCleanersProviderContext;
 import jetbrains.buildServer.agent.DirectoryCleanersRegistry;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Date;
-import java.util.logging.Logger;
+
 
 public class IvyCacheProvider implements DirectoryCleanersProvider {
 
@@ -18,7 +18,7 @@ public class IvyCacheProvider implements DirectoryCleanersProvider {
     private final File myCacheDir;
 
     public IvyCacheProvider(@NotNull BuildAgentConfiguration agentConfiguration) {
-        LOG.info("IvyCacheProvider.constructor");
+        LOG.debug("IvyCacheProvider.constructor");
         myCacheDir = agentConfiguration.getCacheDirectory("sbt_ivy");
     }
 
