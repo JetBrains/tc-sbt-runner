@@ -60,7 +60,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             }
 
             public void onErrorOutput(@NotNull String line) {
-                getLogger().error(line);
+                getLogger().warning(line);
             }
 
             @Override
