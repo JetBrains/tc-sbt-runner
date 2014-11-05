@@ -16,5 +16,5 @@
  */
 
 object HelloFromBackendWE {
-  def main(args: Array[String]) = 1234println("HelloFromBackend!")
+  def main(args: Array[String]) = 12345println("HelloFromBackend!")
 }
