@@ -38,7 +38,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     public static final Pattern LINES_TO_EXCLUDE = Pattern.compile("^\\[(error|warn)\\]",
             Pattern.CASE_INSENSITIVE + Pattern.MULTILINE);
-    private static final String SBT_PATCH_CLASS_NAME = "jetbrains.buildServer.SbtTeamCityLogger";
+    private static final String SBT_PATCH_CLASS_NAME = "jetbrains.buildServer.sbtlogger.SbtTeamCityLogger";
 
     private final IvyCacheProvider myIvyCacheProvider;
 
