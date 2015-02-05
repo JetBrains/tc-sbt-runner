@@ -62,93 +62,93 @@
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>tests-integration</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>common-impl</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>server</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>agent-upgrade</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>agent-upgrade-server</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>agent</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>issue-tracker-impl</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>patches-impl</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>remote-api-impl</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>cl</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>db</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>agent-launcher</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>server-logging</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>launcher-api</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
 
@@ -306,7 +306,7 @@
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>jdom</artifactId>
-            <version>8.1.5-local</version>
+            <version>9-local</version>
         </dependency>
 
 
