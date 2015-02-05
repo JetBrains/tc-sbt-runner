@@ -3,10 +3,10 @@
   <groupId>com.jetbrains.teamcity</groupId>
   <artifactId>hsqldb</artifactId>
   <versioning>
-    <release>8.1.5-local</release>
+    <release>9-local</release>
     <versions>
-      <version>8.1.5-local</version>
+      <version>9-local</version>
     </versions>
-    <lastUpdated>20141017151556</lastUpdated>
+    <lastUpdated>20150204222717</lastUpdated>
   </versioning>
 </metadata>

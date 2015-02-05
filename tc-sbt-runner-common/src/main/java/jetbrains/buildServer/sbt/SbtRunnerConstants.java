@@ -17,7 +17,7 @@ public interface SbtRunnerConstants {
   String SBT_DEFAULT_INSTALLATION_MODE = "Auto";
   String SBT_CUSTOM_INSTALLATION_MODE = "Custom";
   String DEFAULT_VALUE = "-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m " +
-          "-Dsbt.log.noformat=true -Dsbt.log.format=false";
+          "-Dsbt.log.noformat=true -Dsbt.log.format=false -Dsbt.version=0.13.7";
   String TEAMCITY_SBT_DEFAULT_JVM_ARGS_PROPERTY = "teamcity.sbt.defaultJvmArgs";
   String DEFAULT_SBT_COMMANDS = "clean compile test";
   String DEFAULT_SBT_JDK = "%env.JDK_16%";

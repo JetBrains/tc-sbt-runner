@@ -8,6 +8,7 @@ import jetbrains.buildServer.serverSide.SFinishedBuild;
 import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -29,7 +30,7 @@ public class SbtRunnerTest extends RunnerTest2Base {
 
     @Override
     protected String getTestDataPrefixPath() {
-        return "testData/";
+        return "tests/testData/";
     }
 
 
@@ -52,6 +53,7 @@ public class SbtRunnerTest extends RunnerTest2Base {
 
     }
 
+
     @Test
     public void testAutoInstallation() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
@@ -68,7 +70,7 @@ public class SbtRunnerTest extends RunnerTest2Base {
     @Test
     public void testCompileError() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
-        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "--error clean compile");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("compileerror").getPath());
         setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
@@ -80,9 +82,22 @@ public class SbtRunnerTest extends RunnerTest2Base {
 
 
     @Test
+    public void testApplyingStateCompleted() throws Throwable {
+        setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
+        setRunnerParameter("teamcity.build.workingDir", getTestDataPath("compileerror").getPath());
+        setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
+        final SFinishedBuild build = doTest(null);
+        dumpBuildLogLocally(build);
+        Assert.assertTrue(getBuildLog(build).contains("Applying State transformations"));
+        Assert.assertTrue(getBuildLog(build).contains("Reapplying settings"));
+    }
+
+
+    @Test
     public void testCompileSubProject_1() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
-        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean backend/compile");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "--error clean backend/compile");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("subproject").getPath());
         setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
@@ -90,10 +105,11 @@ public class SbtRunnerTest extends RunnerTest2Base {
         Assert.assertTrue(build.getBuildStatus().isSuccessful());
     }
 
+
     @Test
     public void testCompileSubProject_2() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
-        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean backendWE/compile");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "--error clean backendWE/compile");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("subproject").getPath());
         setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
@@ -103,4 +119,9 @@ public class SbtRunnerTest extends RunnerTest2Base {
     }
 
 
+    @AfterMethod
+    @Override
+    protected void tearDown1() throws Exception {
+        super.tearDown1();
+    }
 }

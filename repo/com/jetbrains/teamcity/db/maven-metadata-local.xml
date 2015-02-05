@@ -3,10 +3,10 @@
   <groupId>com.jetbrains.teamcity</groupId>
   <artifactId>db</artifactId>
   <versioning>
-    <release>8.1.5-local</release>
+    <release>9-local</release>
     <versions>
-      <version>8.1.5-local</version>
+      <version>9-local</version>
     </versions>
-    <lastUpdated>20141017151558</lastUpdated>
+    <lastUpdated>20150204222719</lastUpdated>
   </versioning>
 </metadata>

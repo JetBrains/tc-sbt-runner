@@ -24,28 +24,28 @@ public class OutputFilterTest {
 
     @Test
     public void checkLineExcludePattern_4() {
-        Assert.assertTrue(checkFind("[info]"));
+        Assert.assertFalse(checkFind("[info]"));
     }
 
     @Test
     public void checkLineExcludePattern_5() {
-        Assert.assertTrue(checkFind("[info] Loading global plugins from /private/var/folders/9t/wh8psrsd0jg5z8h7wp_ss39h0000gn/T/test-2137710771/agentTmp/agent-sbt/plugins"));
+        Assert.assertFalse(checkFind("[info] Loading global plugins from /private/var/folders/9t/wh8psrsd0jg5z8h7wp_ss39h0000gn/T/test-2137710771/agentTmp/agent-sbt/plugins"));
     }
 
     @Test
     public void checkLineExcludePattern_Info() {
-        Assert.assertTrue(checkFind("[info] checking for changes"));
+        Assert.assertFalse(checkFind("[info] checking for changes"));
     }
 
     @Test
     public void checkLineExcludePattern_Debug() {
-        Assert.assertTrue(checkFind("[debug] All initially invalidated sources: Set()"));
+        Assert.assertFalse(checkFind("[debug] All initially invalidated sources: Set()"));
     }
 
 
     @Test
     public void checkLineExcludePattern_DebugMultiLine() {
-        Assert.assertTrue(checkFind("[debug] \n" +
+        Assert.assertFalse(checkFind("[debug] \n" +
                 "[debug] Initial source changes: \n" +
                 "[debug] \tremoved:Set()\n" +
                 "[debug] \tadded: Set()\n" +

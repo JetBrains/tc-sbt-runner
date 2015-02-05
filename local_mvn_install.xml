@@ -3,9 +3,9 @@
         Install specific jars to local maven repo
     </description>
 
-    <property name="tc.dir" value="/Users/shkate/Downloads/TeamCity/"/>
+    <property name="tc.dir" value="/Users/shkate/Tools/TeamCity/"/>
     <property name="local.repo" value="/Users/shkate/Work/tc-sbt-runner/repo"/>
-    <property name="version" value="8.1.5-local"/>
+    <property name="version" value="9-local"/>
 
     <target name="common-api">
         <exec executable="mvn">
