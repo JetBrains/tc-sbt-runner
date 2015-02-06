@@ -4,7 +4,7 @@
 
     <test name="runner">
         <classes>
-            <!--<class name="jetbrains.buildServer.sbt.test.integration.SbtRunnerTest"/>-->
+            <class name="jetbrains.buildServer.sbt.test.integration.SbtRunnerTest"/>
             <class name="jetbrains.buildServer.sbt.test.server.SbtRunnerTypeTest"/>
             <class name="jetbrains.buildServer.sbt.test.server.OutputFilterTest"/>
         </classes>
