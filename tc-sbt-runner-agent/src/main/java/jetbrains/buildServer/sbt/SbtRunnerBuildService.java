@@ -23,6 +23,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String SBT_PATCH_JAR_NAME = "sbt-teamcity-logger.jar";
 
+    private static final String SBT_PATCH_FOLDER_NAME = "tc_plugin";
+
     private static final String SBT_DISTRIB = "sbt-distrib";
 
     private static final String SBT_AUTO_HOME_FOLDER = "agent-sbt";
@@ -34,8 +36,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     };
     public static final String BUILD_ACTIVITY_TYPE = "BUILD_ACTIVITY_TYPE";
 
-    public static final Pattern LINES_TO_EXCLUDE = Pattern.compile("^\\[(info|warn|error|debug)\\]",
+    public static final Pattern LINES_TO_EXCLUDE = Pattern.compile("^\\[(error|warn)\\]",
             Pattern.CASE_INSENSITIVE + Pattern.MULTILINE);
+    private static final String SBT_PATCH_CLASS_NAME = "jetbrains.buildServer.sbtlogger.SbtTeamCityLogger";
 
     private final IvyCacheProvider myIvyCacheProvider;
 
@@ -52,8 +55,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
                 Matcher matcher = LINES_TO_EXCLUDE.matcher(line);
                 if (matcher.find()) {
                     //we don't want to duplicate lines
-                    //all normal log messages will be wrapped in TeamCity service messages by sbt-tc-logger
-                    //so output from other loggers could be ignored
+                    //sbt-tc-logger wraps WARN and ERROR messages
+                    //we can exclude those messages from normal output
                     return;
                 }
                 getLogger().message(line);
@@ -75,7 +78,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
 
-        String mainClassName = isAutoInstallMode() ? installAndPatchSbt() : getMainClassName();
+        String mainClassName = isAutoInstallMode() ? installSbt() : getMainClassName();
         String javaHome = getJavaHome();
         String sbtHome = getSbtHome();
         getLogger().message("Java home set to: " + javaHome);
@@ -96,23 +99,20 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         cliBuilder.setClassPath(getClasspath());
         cliBuilder.setMainClass(mainClassName);
 
-        List<String> programParameters = getProgramParameters();
-        if (isAutoInstallMode()) {
-            programParameters = addDirectoriesParameters(programParameters);
-        }
-        cliBuilder.setProgramArgs(programParameters);
+        List<String> pp = new ArrayList<String>();
+        pp.add(getApplyCommand());
+        pp.addAll(getProgramParameters());
+
+        cliBuilder.setProgramArgs(pp);
 
         cliBuilder.setWorkingDir(getWorkingDirectory().getAbsolutePath());
 
         return buildCommandline(cliBuilder);
     }
 
-    private List<String> addDirectoriesParameters(@NotNull List<String> programParameters) {
-        List<String> params = new ArrayList<String>();
-        params.add(String.format("-Dsbt.global.base=%s", getAutoInstallSbtFolder()));
-        params.addAll(programParameters);
-        //-Dsbt.log.format=false
-        return params;
+    private String getApplyCommand() {
+        String pathToPlugin = new File(getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME + File.separator + SBT_PATCH_JAR_NAME).getAbsolutePath();
+        return "apply -cp " + pathToPlugin + " " + SBT_PATCH_CLASS_NAME;
     }
 
     private String getJavaHome() throws RunBuildException {
@@ -140,12 +140,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         }
     }
 
-    private String installAndPatchSbt() {
+    private String installSbt() {
         try {
             getLogger().activityStarted("SBT installation", "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
             getLogger().message("SBT will be install to: " + getAutoInstallSbtFolder());
             copyResources("/" + SBT_DISTRIB + "/", SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin"));
-            copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "plugins" + File.separator + "lib"));
+            copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME));
             getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
         } catch (Exception e) {
