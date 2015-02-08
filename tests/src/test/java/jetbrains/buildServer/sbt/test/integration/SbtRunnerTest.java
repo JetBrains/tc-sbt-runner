@@ -70,7 +70,7 @@ public class SbtRunnerTest extends RunnerTest2Base {
     @Test
     public void testCompileError() throws Throwable {
         setRunnerParameter(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto");
-        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "--error clean compile");
+        setRunnerParameter(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
         setRunnerParameter("teamcity.build.workingDir", getTestDataPath("compileerror").getPath());
         setRunnerParameter("jvmArgs", SbtRunnerRunType.SBT_JVM_ARGS);
         final SFinishedBuild build = doTest(null);
@@ -118,10 +118,4 @@ public class SbtRunnerTest extends RunnerTest2Base {
         Assert.assertTrue(build.getBuildStatus().isFailed());
     }
 
-
-    @AfterMethod
-    @Override
-    protected void tearDown1() throws Exception {
-        super.tearDown1();
-    }
 }
