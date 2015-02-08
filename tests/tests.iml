@@ -12,6 +12,47 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.jetbrains.teamcity:tests-support:8.1.5" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.teamcity:server-api:8.1.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-annotations-api:7.0.55" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-jsp-api:7.0.55" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-el-api:7.0.55" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-servlet-api:7.0.55" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-instrument:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.hsqldb:hsqldb:2.2.9" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.security:spring-security-aspects:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.teamcity:agent-api:8.1.5" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.teamcity:common-api:8.1.5" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.teamcity.idea:obsolete-openapi:8.1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: joda-time:joda-time:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:tests-integration:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:common-impl:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:server:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:agent-upgrade:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:agent-upgrade-server:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:agent:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:issue-tracker-impl:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:patches-impl:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:remote-api-impl:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:cl:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:db:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:hsqldb:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:agent-launcher:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:server-logging:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:launcher-api:8.1.5-local" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.trove4j:trove4j:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.jetbrains.teamcity:jdom:8.1.5-local" level="project" />
     <orderEntry type="module" module-name="tc-sbt-runner-common" />
     <orderEntry type="module" module-name="tc-sbt-runner-server" />
     <orderEntry type="module" module-name="tc-sbt-runner-agent" />
@@ -133,4 +174,3 @@
     <orderEntry type="library" name="Maven: xpp3:xpp3_min:1.1.4c" level="project" />
   </component>
 </module>
-
