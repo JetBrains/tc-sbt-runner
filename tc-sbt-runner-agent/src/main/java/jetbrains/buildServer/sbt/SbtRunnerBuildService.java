@@ -79,6 +79,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
 
         String mainClassName = isAutoInstallMode() ? installSbt() : getMainClassName();
+        if (!isAutoInstallMode()) {
+            copySbtTcLogger();
+        }
         String javaHome = getJavaHome();
         String sbtHome = getSbtHome();
         getLogger().message("Java home set to: " + javaHome);
@@ -145,9 +148,24 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().activityStarted("SBT installation", "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
             getLogger().message("SBT will be install to: " + getAutoInstallSbtFolder());
             copyResources("/" + SBT_DISTRIB + "/", SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin"));
-            copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME));
+            copySbtTcLogger();
             getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
+        } catch (Exception e) {
+            getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
+            throw new IllegalStateException(e);
+        } finally {
+            getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
+        }
+
+    }
+
+    private void copySbtTcLogger() {
+        try {
+            getLogger().activityStarted("SBT TeamCity Logger installation", "'Custom' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
+            String path = getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME;
+            getLogger().message("sbt-teamcity-logger.jar will be installed to: " + path);
+            copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(path));
         } catch (Exception e) {
             getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
             throw new IllegalStateException(e);
