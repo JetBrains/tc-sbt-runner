@@ -35,6 +35,31 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-compress:1.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.tukaani:xz:1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.teamcity:tests-support:8.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:server-api:8.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-annotations-api:7.0.55" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-jsp-api:7.0.55" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-el-api:7.0.55" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-servlet-api:7.0.55" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aop:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aspects:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-beans:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context-support:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-core:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-expression:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-instrument:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-jdbc:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-tx:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-web:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-webmvc:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.ehcache:ehcache:1.6.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hsqldb:hsqldb:2.2.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.security:spring-security-aspects:3.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:common-api:8.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:obsolete-openapi:8.1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: joda-time:joda-time:1.5.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-compress:1.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.tukaani:xz:1.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.teamcity:tests-support:8.1.5" level="project" />
     <orderEntry type="module" module-name="tc-sbt-runner-common" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:server-api:8.1.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:jstl:1.1.2" level="project" />
