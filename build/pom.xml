@@ -10,7 +10,7 @@
     <artifactId>build</artifactId>
     <packaging>pom</packaging>
     <properties>
-        <maven.build.timestamp.format>yyyy-MM-ddTHH:mm:ss</maven.build.timestamp.format>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     </properties>
     <dependencies>
         <dependency>
