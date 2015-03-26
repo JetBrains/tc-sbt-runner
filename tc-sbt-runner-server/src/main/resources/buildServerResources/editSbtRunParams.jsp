@@ -29,7 +29,7 @@
         <th><label for="sbt.home">SBT home path:<l:star/></label></th>
         <td>
             <props:textProperty name="sbt.home" className="longField"/>
-            <span class="smallNote">Path to existed SBT directory. Ensure <a href="https://github.com/JetBrains/sbt-tc-logger">SBT TeamCity logger</a> is added</span>
+            <span class="smallNote">Path to existed SBT directory.</span>
             <span class="error" id="error_sbt.home"></span>
         </td>
     </tr>
