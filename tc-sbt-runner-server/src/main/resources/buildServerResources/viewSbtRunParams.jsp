@@ -25,9 +25,7 @@
 </div>
 <c:if test="${propertiesBean.properties['sbt.installationMode']=='custom'}">
     <div class="parameter">
-        SBT home path: <strong><props:displayValue name="sbt.home" emptyValue="none specified"/></strong>
-        <span class="smallNote" style="margin-left: 1em !important;">ensure <a
-                href="https://github.com/JetBrains/sbt-tc-logger">SBT TeamCity logger</a> is added</span>
+        SBT home path: <strong><props:displayValue name="sbt.home" emptyValue="none specified"/></strong>.
     </div>
 </c:if>
 
