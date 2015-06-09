@@ -27,7 +27,7 @@ public class SbtRunnerBuildServiceFactory implements CommandLineBuildServiceFact
 
     @NotNull
     public AgentBuildRunnerInfo getBuildRunnerInfo() {
-        LOG.info("SbtRunnerBuildServiceFactory.getBuildRunnerInfo");
+        LOG.debug("SbtRunnerBuildServiceFactory.getBuildRunnerInfo");
         return new AgentBuildRunnerInfo() {
             @NotNull
             public String getType() {
