@@ -1,13 +1,12 @@
 package jetbrains.buildServer.sbt;
 
-
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
 import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
 
 public class SbtRunnerBuildServiceFactory implements CommandLineBuildServiceFactory {
 
