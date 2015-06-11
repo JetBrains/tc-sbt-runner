@@ -1,5 +1,6 @@
 package jetbrains.buildServer.sbt;
 
+import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.runner.*;
@@ -7,7 +8,7 @@ import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
-import jetbrains.buildServer.util.StringUtil;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -19,6 +20,8 @@ import java.util.regex.Pattern;
 
 public class SbtRunnerBuildService extends BuildServiceAdapter {
 
+    private static final Logger LOG = Logger.getLogger(SbtRunnerBuildServiceFactory.class.getName());
+
     private static final String SBT_LAUNCHER_JAR_NAME = "sbt-launch.jar";
 
     private static final String SBT_PATCH_JAR_NAME = "sbt-teamcity-logger.jar";
@@ -29,6 +32,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String SBT_AUTO_HOME_FOLDER = "agent-sbt";
 
+    private static final String INLINE_COMMANDS_FORMATTER = "\"%s\" %s %s";
+
+    private static final String INFILE_COMMANDS_FORMATTER = ";%s\n ;%s %s";
+
+    private static final String RUN_INFILE_COMMANDS_FORMATTER = "< %s";
+
 
     private final static String[] SBT_JARS = new String[]{
             SBT_LAUNCHER_JAR_NAME,
@@ -37,6 +46,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     public static final String BUILD_ACTIVITY_TYPE = "BUILD_ACTIVITY_TYPE";
 
     public static final Pattern LINES_TO_EXCLUDE = Pattern.compile("^\\[(error|warn)\\]",
+            Pattern.CASE_INSENSITIVE + Pattern.MULTILINE);
+    public static final Pattern KNOWN_SECTION_MESSAGE = Pattern.compile("^(##teamcity\\[compilationStarted|testSuiteStarted|testStarted)",
             Pattern.CASE_INSENSITIVE + Pattern.MULTILINE);
     private static final String SBT_PATCH_CLASS_NAME = "jetbrains.buildServer.sbtlogger.SbtTeamCityLogger";
 
@@ -50,10 +61,19 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @Override
     public List<ProcessListener> getListeners() {
         return Collections.<ProcessListener>singletonList(new ProcessListenerAdapter() {
+            boolean knownSectionStarts = false;
+
             @Override
             public void onStandardOutput(@NotNull String line) {
+                if (!knownSectionStarts) {
+                    //we need this otherwise we can hide important messages appeared before our own logger was started to print server messages
+                    Matcher matcher = KNOWN_SECTION_MESSAGE.matcher(line);
+                    if (matcher.find()) {
+                        knownSectionStarts = true;
+                    }
+                }
                 Matcher matcher = LINES_TO_EXCLUDE.matcher(line);
-                if (matcher.find()) {
+                if (matcher.find() && knownSectionStarts) {
                     //we don't want to duplicate lines
                     //sbt-tc-logger wraps WARN and ERROR messages
                     //we can exclude those messages from normal output
@@ -102,11 +122,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         cliBuilder.setClassPath(getClasspath());
         cliBuilder.setMainClass(mainClassName);
 
-        List<String> pp = new ArrayList<String>();
-        pp.add(getApplyCommand());
-        pp.addAll(getProgramParameters());
 
-        cliBuilder.setProgramArgs(pp);
+        cliBuilder.setProgramArgs(getCommands());
 
         cliBuilder.setWorkingDir(getWorkingDirectory().getAbsolutePath());
 
@@ -116,6 +133,10 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private String getApplyCommand() {
         String pathToPlugin = new File(getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME + File.separator + SBT_PATCH_JAR_NAME).getAbsolutePath();
         return "apply -cp " + pathToPlugin + " " + SBT_PATCH_CLASS_NAME;
+    }
+
+    private String getCheckStatusCommand() {
+        return "sbt-teamcity-logger";
     }
 
     private String getJavaHome() throws RunBuildException {
@@ -170,7 +191,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
             throw new IllegalStateException(e);
         } finally {
-            getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
+            getLogger().activityFinished("SBT TeamCity Logger installation", BUILD_ACTIVITY_TYPE);
         }
 
     }
@@ -217,15 +238,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     }
 
     @NotNull
-    public List<String> getProgramParameters() {
-        String args = getRunnerParameters().get(SbtRunnerConstants.SBT_ARGS_PARAM);
-        if (StringUtil.isEmptyOrSpaces(args)) {
-            return Collections.emptyList();
-        }
-        return CommandLineArgumentsUtil.extractArguments(args);
-    }
-
-    @NotNull
     public String getClasspath() {
         String sbtHome = getSbtHome();
         File jarDir = new File(sbtHome, "bin");
@@ -255,4 +267,44 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     public String getIvyCachePath() {
         return myIvyCacheProvider.getCacheDir().getAbsolutePath();
     }
+
+    @NotNull
+    public List<String> getCommands() {
+        String args = getRunnerParameters().get(SbtRunnerConstants.SBT_ARGS_PARAM).trim();
+        if (StringUtil.isEmpty(args)) {
+            getLogger().warning("No commands specified.");
+            return Collections.emptyList();
+        }
+
+        if (args.startsWith(";")) {
+            return getCommandsFromFile(args);
+        }
+        return getInlinedCommands(args);
+    }
+
+    @NotNull
+    private List<String> getInlinedCommands(@NotNull String args) {
+        return CommandLineArgumentsUtil.extractArguments(String.format(INLINE_COMMANDS_FORMATTER, getApplyCommand(), getCheckStatusCommand(), args));
+    }
+
+    @NotNull
+    private List<String> getCommandsFromFile(@NotNull String args) {
+        try {
+            File file = FileUtil.createTempFile(getAgentTempDirectory(), "commands", ".file", true);
+            String content = String.format(INFILE_COMMANDS_FORMATTER, getApplyCommand(), getCheckStatusCommand(), args);
+            String name = file.getAbsolutePath();
+            getLogger().activityStarted("Prepare SBT run", "Write commands to file.", BUILD_ACTIVITY_TYPE);
+            getLogger().message("File name: " + name);
+            getLogger().message("File content:\n" + content);
+            getLogger().activityFinished("Prepare SBT run", BUILD_ACTIVITY_TYPE);
+            FileUtil.writeFile(file, content, "UTF-8");
+            List<String> commands = new ArrayList<String>();
+            commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, name));
+            return commands;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 }
