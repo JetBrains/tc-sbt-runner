@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.jetbrains.teamcity</groupId>
             <artifactId>common-api</artifactId>
-            <version>9-local</version>
+            <version>${teamcity-version}</version>
             <scope>provided</scope>
         </dependency>
 

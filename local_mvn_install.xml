@@ -3,15 +3,14 @@
         Install specific jars to local maven repo
     </description>
 
-    <property name="tc.dir" value="/Users/shkate/Tools/TeamCity/"/>
-    <property name="tc.dev.dir" value="/Users/shkate/Work/Perforce/TeamServer/BuildServer/.idea_artifacts/web-deployment"/>
-    <property name="local.repo" value="/Users/shkate/Work/tc-sbt-runner/repo"/>
+    <property name="tc.dir" value="${tc.raw.dir}/Users/shkate/Tools/TeamCity/"/>
+    <property name="local.repo" value="/repo"/>
     <property name="version" value="9-local"/>
 
     <target name="common-api">
         <exec executable="mvn">
             <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
-            <arg value="-Dfile=${tc.dev.dir}/WEB-INF/lib/common-api.jar"/>
+            <arg value="-Dfile=${tc.dir}/WEB-INF/lib/common-api.jar"/>
             <arg value="-DartifactId=common-api"/>
             <arg value="-DgroupId=com.jetbrains.teamcity"/>
             <arg value="-Dversion=${version}"/>
@@ -50,7 +49,7 @@
     <target name="common-impl">
         <exec executable="mvn">
             <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
-            <arg value="-Dfile=${tc.dev.dir}/WEB-INF/lib/common-impl.jar"/>
+            <arg value="-Dfile=${tc.dir}/WEB-INF/lib/common-impl.jar"/>
             <arg value="-DartifactId=common-impl"/>
             <arg value="-DgroupId=com.jetbrains.teamcity"/>
             <arg value="-Dversion=${version}"/>
@@ -142,7 +141,7 @@
     <target name="cl">
         <exec executable="mvn">
             <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
-            <arg value="-Dfile=${tc.dev.dir}/WEB-INF/lib/cl.jar"/>
+            <arg value="-Dfile=${tc.dir}/WEB-INF/lib/cl.jar"/>
             <arg value="-DartifactId=cl"/>
             <arg value="-DgroupId=com.jetbrains.teamcity"/>
             <arg value="-Dversion=${version}"/>
