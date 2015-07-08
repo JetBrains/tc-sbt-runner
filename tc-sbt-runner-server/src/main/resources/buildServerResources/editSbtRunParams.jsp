@@ -22,14 +22,14 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span id="sbt_installation_info" class="smallNote">In 'Auto' mode the latest SBT version will be automatically installed</span>
+            <span id="sbt_installation_info" class="smallNote">The latest SBT version will be automatically installed on the agents</span>
         </td>
     </tr>
     <tr id="sbt.home_selection">
         <th><label for="sbt.home">SBT home path:<l:star/></label></th>
         <td>
             <props:textProperty name="sbt.home" className="longField"/>
-            <span class="smallNote">Path to existed SBT directory.</span>
+            <span class="smallNote">The path to the existing SBT home directory</span>
             <span class="error" id="error_sbt.home"></span>
         </td>
     </tr>
@@ -39,11 +39,11 @@
         window.syncSBTInstMode = function () {
             if ($("sbtInstallationSelection").value == 'custom') {
                 BS.Util.show("sbt.home_selection");
-                $("sbt_installation_info").innerHTML = "In 'Custom' mode sbt-launch.jar from \\bin folder under SBT home will be launched"
+                $("sbt_installation_info").innerHTML = "The installed SBT will the launched from the SBT home"
             }
             else {
                 BS.Util.hide("sbt.home_selection");
-                $("sbt_installation_info").innerHTML = "In 'Auto' mode the latest SBT version will be automatically installed"
+                $("sbt_installation_info").innerHTML = "The latest SBT version will be automatically installed on the agents"
             }
             BS.MultilineProperties.updateVisible();
         };
@@ -51,7 +51,7 @@
     </script>
 
 </l:settingsGroup>
-<l:settingsGroup title="Java Parameters">
+<l:settingsGroup title="Java Parameters" className="advancedSetting">
     <props:editJavaHome/>
     <props:editJvmArgs/>
 </l:settingsGroup>
