@@ -38,6 +38,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String RUN_INFILE_COMMANDS_FORMATTER = "< %s";
 
+    private static final String SBT_INSTALLATION_STEP_NAME = "SBT installation";
+
+    private static final String SBT_TEAMCITY_LOGGER_INSTALLATION = "SBT TeamCity logger installation";
 
     private final static String[] SBT_JARS = new String[]{
             SBT_LAUNCHER_JAR_NAME,
@@ -50,6 +53,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     public static final Pattern KNOWN_SECTION_MESSAGE = Pattern.compile("^(##teamcity\\[compilationStarted|testSuiteStarted|testStarted)",
             Pattern.CASE_INSENSITIVE + Pattern.MULTILINE);
     private static final String SBT_PATCH_CLASS_NAME = "jetbrains.buildServer.sbtlogger.SbtTeamCityLogger";
+
 
     private final IvyCacheProvider myIvyCacheProvider;
 
@@ -165,8 +169,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     }
 
     private String installSbt() {
+
         try {
-            getLogger().activityStarted("SBT installation", "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
+            getLogger().activityStarted(SBT_INSTALLATION_STEP_NAME, "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
             getLogger().message("SBT will be install to: " + getAutoInstallSbtFolder());
             copyResources("/" + SBT_DISTRIB + "/", SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin"));
             copySbtTcLogger();
@@ -176,14 +181,14 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
             throw new IllegalStateException(e);
         } finally {
-            getLogger().activityFinished("SBT installation", BUILD_ACTIVITY_TYPE);
+            getLogger().activityFinished(SBT_INSTALLATION_STEP_NAME, BUILD_ACTIVITY_TYPE);
         }
 
     }
 
     private void copySbtTcLogger() {
         try {
-            getLogger().activityStarted("SBT TeamCity Logger installation", "'Custom' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
+            getLogger().activityStarted(SBT_TEAMCITY_LOGGER_INSTALLATION, BUILD_ACTIVITY_TYPE);
             String path = getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME;
             getLogger().message("sbt-teamcity-logger.jar will be installed to: " + path);
             copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(path));
@@ -191,7 +196,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
             throw new IllegalStateException(e);
         } finally {
-            getLogger().activityFinished("SBT TeamCity Logger installation", BUILD_ACTIVITY_TYPE);
+            getLogger().activityFinished(SBT_TEAMCITY_LOGGER_INSTALLATION, BUILD_ACTIVITY_TYPE);
         }
 
     }
