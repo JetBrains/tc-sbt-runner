@@ -3,9 +3,9 @@
                  xsi:noNamespaceSchemaLocation="urn:shemas-jetbrains-com:teamcity-plugin-v1-xml">
   <info>
     <name>sbt-runner</name>
-    <display-name>Runs SBT builds</display-name>
+    <display-name>Simple Build Tool (Scala)</display-name>
     <version>@Version@</version>
-    <description>Scala Simple Build Tool Runner</description>
+    <description>Runs SBT builds</description>
     <vendor>
       <name>JetBrains, s.r.o.</name>
       <url>http://www.jetbrains.com</url>
