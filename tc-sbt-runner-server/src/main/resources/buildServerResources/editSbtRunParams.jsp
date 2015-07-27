@@ -11,7 +11,7 @@
         </th>
         <td>
             <props:textProperty name="sbt.args" className="longField" expandable="true"/>
-            <span class="smallNote">Commands to execute, e.g. <i>clean "set scalaVersion="2.11.6"" compile test</i> or <i>;clean;set scalaVersion="2.11.6";compile;test</i></span>
+            <span class="smallNote">Commands to execute, e.g. <i>clean "set scalaVersion:="2.11.6"" compile test</i> or <i>;clean;set scalaVersion:="2.11.6";compile;test</i></span>
         </td>
     </tr>
     <tr>
@@ -22,7 +22,7 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span id="sbt_installation_info" class="smallNote">The latest SBT version will be automatically installed on the agents</span>
+            <span id="sbt_installation_info" class="smallNote">TeamCity bundled SBT launcher will be used (version 0.13.8)<bs:help file="Simple+Build+Tool+(Scala)"/></span>
         </td>
     </tr>
     <tr id="sbt.home_selection">
