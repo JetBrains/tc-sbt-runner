@@ -22,7 +22,8 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span id="sbt_installation_info" class="smallNote">TeamCity bundled SBT launcher will be used (version 0.13.8)<bs:help file="Simple+Build+Tool+(Scala)"/></span>
+            <span id="sbt_installation_info" class="smallNote" style="display: inline;">TeamCity bundled SBT launcher will be used (version 0.13.8)</span>
+            <span><bs:help file="Simple+Build+Tool+(Scala)"/></span>
         </td>
     </tr>
     <tr id="sbt.home_selection">
@@ -43,7 +44,7 @@
             }
             else {
                 BS.Util.hide("sbt.home_selection");
-                $("sbt_installation_info").innerHTML = "The latest SBT version will be automatically installed on the agents"
+                $("sbt_installation_info").innerHTML = "TeamCity bundled SBT launcher will be used (version 0.13.8)"
             }
             BS.MultilineProperties.updateVisible();
         };
