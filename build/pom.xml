@@ -72,7 +72,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>tc-sbt-runner-agent</finalName>
+                            <finalName>sbt-runner-agent</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>plugin-agent-assembly.xml</descriptor>
@@ -86,7 +86,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>tc-sbt-runner</finalName>
+                            <finalName>sbt-runner</finalName>
                             <outputDirectory>${project.parent.build.directory}</outputDirectory>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
