@@ -11,7 +11,7 @@
         </th>
         <td>
             <props:textProperty name="sbt.args" className="longField" expandable="true"/>
-            <span class="smallNote">Commands to execute, e.g. <i>clean "set scalaVersion:="2.11.6"" compile test</i> or <i>;clean;set scalaVersion:="2.11.6";compile;test</i></span>
+            <span class="smallNote">Commands to execute, e.g. <i>clean compile test</i> or <i>;clean;set scalaVersion:="2.11.6";compile;test</i> for commands require quotation</span>
         </td>
     </tr>
     <tr>
