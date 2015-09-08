@@ -10,8 +10,42 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.jetbrains.teamcity:common-api:9-local" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.jetbrains.teamcity:agent:9-local" level="project" />
     <orderEntry type="module" module-name="tc-sbt-runner-common" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:agent-api:9.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aop:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aspects:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.aspectj:aspectjweaver:1.7.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-beans:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context-support:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-core:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-expression:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-instrument:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-jdbc:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-tx:4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.teamcity:tests-support:9.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: jmock:jmock:1.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:1.6.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-integration:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-library:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jmock:jmock:2.5.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jmock:jmock-legacy:2.5.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib-nodep:2.1_3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.testng:testng:6.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.beanshell:bsh:2.0b4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.beust:jcommander:1.27" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.yaml:snakeyaml:1.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:openapi:95.677" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:annotations:132.719" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:util:95.677" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:resources_en:95.677" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:common-api:9.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-codec:commons-codec:1.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
@@ -40,39 +74,11 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: xerces:xercesImpl:2.9.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: xml-apis:xml-apis:1.3.04" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: xpp3:xpp3:1.1.4c" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aop:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: aopalliance:aopalliance:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aspects:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.aspectj:aspectjweaver:1.7.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-beans:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context-support:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-core:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.1.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-expression:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-instrument:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-jdbc:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-tx:4.0.5.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.teamcity:tests-support:9.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: jmock:jmock:1.2.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:1.6.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-integration:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-library:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jmock:jmock:2.5.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jmock:jmock-legacy:2.5.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib-nodep:2.1_3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.testng:testng:6.8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.beanshell:bsh:2.0b4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.beust:jcommander:1.27" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.yaml:snakeyaml:1.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:openapi:95.677" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:annotations:132.719" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:util:95.677" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:resources_en:95.677" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.jetbrains.teamcity:common-api:9-local" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.jetbrains.teamcity:agent:9-local" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.internal:agent:9.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-beanutils:commons-beanutils-core:1.7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.1.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.ehcache:ehcache:1.6.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:ehcache-patch:1.6" level="project" />
   </component>
 </module>
