@@ -4,7 +4,7 @@ public interface SbtRunnerConstants {
 
   String RUNNER_TYPE = "SBT";
   String RUNNER_DISPLAY_NAME = "Simple Build Tool (Scala)";
-  String RUNNER_DESCRIPTION = RUNNER_DISPLAY_NAME;
+  String RUNNER_DESCRIPTION = "Runs SBT builds";
 
   String SBT_HOME_PARAM = "sbt.home";
   String SBT_ARGS_PARAM = "sbt.args";
@@ -16,8 +16,7 @@ public interface SbtRunnerConstants {
   String SBT_ARGS = "clean compile test";
   String SBT_DEFAULT_INSTALLATION_MODE = "Auto";
   String SBT_CUSTOM_INSTALLATION_MODE = "Custom";
-  String DEFAULT_VALUE = "-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m " +
-          "-Dsbt.log.noformat=true -Dsbt.log.format=false";
+  String DEFAULT_VALUE = "-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m";
   String TEAMCITY_SBT_DEFAULT_JVM_ARGS_PROPERTY = "teamcity.sbt.defaultJvmArgs";
   String DEFAULT_SBT_COMMANDS = "clean compile test";
   String DEFAULT_SBT_JDK = "%env.JDK_16%";

@@ -3,14 +3,14 @@
         Install specific jars to local maven repo
     </description>
 
-    <property name="tc.dir" value="/Users/shkate/Downloads/TeamCity/"/>
-    <property name="local.repo" value="/Users/shkate/Work/tc-sbt-runner/repo"/>
-    <property name="version" value="8.1.5-local"/>
+    <property name="tc.dir" value="${tc.raw.dir}/Users/shkate/Tools/TeamCity/"/>
+    <property name="local.repo" value="/repo"/>
+    <property name="version" value="9-local"/>
 
     <target name="common-api">
         <exec executable="mvn">
             <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
-            <arg value="-Dfile=${tc.dir}/devPackage/common-api.jar"/>
+            <arg value="-Dfile=${tc.dir}/WEB-INF/lib/common-api.jar"/>
             <arg value="-DartifactId=common-api"/>
             <arg value="-DgroupId=com.jetbrains.teamcity"/>
             <arg value="-Dversion=${version}"/>
@@ -49,7 +49,7 @@
     <target name="common-impl">
         <exec executable="mvn">
             <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
-            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/common-impl.jar"/>
+            <arg value="-Dfile=${tc.dir}/WEB-INF/lib/common-impl.jar"/>
             <arg value="-DartifactId=common-impl"/>
             <arg value="-DgroupId=com.jetbrains.teamcity"/>
             <arg value="-Dversion=${version}"/>
@@ -141,7 +141,7 @@
     <target name="cl">
         <exec executable="mvn">
             <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
-            <arg value="-Dfile=${tc.dir}/webapps/ROOT/WEB-INF/lib/cl.jar"/>
+            <arg value="-Dfile=${tc.dir}/WEB-INF/lib/cl.jar"/>
             <arg value="-DartifactId=cl"/>
             <arg value="-DgroupId=com.jetbrains.teamcity"/>
             <arg value="-Dversion=${version}"/>
@@ -227,9 +227,21 @@
         </exec>
     </target>
 
+    <target name="app-wrapper">
+        <exec executable="mvn">
+            <arg value="org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file"/>
+            <arg value="-Dfile=${tc.dir}/buildAgent/lib/app-wrapper.jar"/>
+            <arg value="-DartifactId=app-wrapper"/>
+            <arg value="-DgroupId=com.jetbrains.teamcity"/>
+            <arg value="-Dversion=${version}"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-DlocalRepositoryPath=${local.repo}"/>
+        </exec>
+    </target>
+
 
     <target name="copy all" depends="jdom,common-api,server,tests-integration, common-impl, launcher-api,
-    server-logging, agent-launcher, hsqldb, db, remote-api-impl,agent,agent-upgrade-server, agent-upgrade, cl, issue-tracker-impl,patches-impl">
+    server-logging, app-wrapper, agent-launcher, hsqldb, db, remote-api-impl,agent,agent-upgrade-server, agent-upgrade, cl, issue-tracker-impl,patches-impl">
         <echo message="All is done!"/>
     </target>
 
