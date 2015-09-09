@@ -11,7 +11,7 @@
          <outputDirectory>/</outputDirectory>
      </file> 
      <file>
-         <source>target/tc-sbt-runner-agent.zip</source>
+         <source>target/sbt-runner-agent.zip</source>
          <outputDirectory>agent</outputDirectory>
      </file> 
   </files>

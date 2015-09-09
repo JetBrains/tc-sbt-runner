@@ -33,14 +33,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>common-api</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.jetbrains.teamcity.idea</groupId>
             <artifactId>openapi</artifactId>
             <version>LATEST</version>
@@ -71,9 +63,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.jetbrains</groupId>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>common-api</artifactId>
+            <version>${teamcity-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity.internal</groupId>
             <artifactId>agent</artifactId>
-            <version>1.0</version>
+            <version>${teamcity-version}</version>
             <scope>provided</scope>
         </dependency>
 

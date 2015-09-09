@@ -15,12 +15,12 @@ public class SbtRunnerBuildServiceFactory implements CommandLineBuildServiceFact
 
     public SbtRunnerBuildServiceFactory(@NotNull IvyCacheProvider ivyCacheProvider) {
         myIvyCacheProvider = ivyCacheProvider;
-        LOG.info("SbtRunnerBuildServiceFactory.constructor");
+        LOG.debug("SbtRunnerBuildServiceFactory.constructor");
     }
 
     @NotNull
     public CommandLineBuildService createService() {
-        LOG.info("SbtRunnerBuildServiceFactory.createService");
+        LOG.debug("SbtRunnerBuildServiceFactory.createService");
         return new SbtRunnerBuildService(myIvyCacheProvider);
     }
 

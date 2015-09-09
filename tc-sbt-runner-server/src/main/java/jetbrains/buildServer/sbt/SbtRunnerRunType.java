@@ -1,19 +1,20 @@
 package jetbrains.buildServer.sbt;
 
-import java.util.*;
-
 import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.requirements.Requirement;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
+
 public class SbtRunnerRunType extends RunType {
 
 
-    public static final String DEFAULT_SBT_JVM_ARGS = TeamCityProperties.
-            getProperty("teamcity.sbt.defaultJvmArgs", "-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m " +
-                    "-Dsbt.log.format=false");
+    public static final String SBT_JVM_ARGS = TeamCityProperties.getProperty(
+            SbtRunnerConstants.TEAMCITY_SBT_DEFAULT_JVM_ARGS_PROPERTY,
+            SbtRunnerConstants.DEFAULT_VALUE);
+
     private PluginDescriptor myPluginDescriptor;
 
     public SbtRunnerRunType(@NotNull final RunTypeRegistry runTypeRegistry,
@@ -35,6 +36,7 @@ public class SbtRunnerRunType extends RunType {
         };
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return SbtRunnerConstants.RUNNER_DESCRIPTION;
@@ -53,12 +55,13 @@ public class SbtRunnerRunType extends RunType {
     @Override
     public Map<String, String> getDefaultRunnerProperties() {
         return new HashMap<String, String>() {{
-            put(SbtRunnerConstants.SBT_ARGS_PARAM, "clean compile");
-            put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "Auto");
-            put("target.jdk.home", "%env.JDK_16%");
-            put("jvmArgs", DEFAULT_SBT_JVM_ARGS);
+            put(SbtRunnerConstants.SBT_ARGS_PARAM, SbtRunnerConstants.DEFAULT_SBT_COMMANDS);
+            put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, SbtRunnerConstants.AUTO_INSTALL_FLAG);
+            put("target.jdk.home", SbtRunnerConstants.DEFAULT_SBT_JDK);
+            put("jvmArgs", SBT_JVM_ARGS);
         }};
     }
+
 
     @NotNull
     @Override
@@ -66,6 +69,7 @@ public class SbtRunnerRunType extends RunType {
         return SbtRunnerConstants.RUNNER_TYPE;
     }
 
+    @NotNull
     @Override
     public String getDisplayName() {
         return SbtRunnerConstants.RUNNER_DISPLAY_NAME;
@@ -82,10 +86,10 @@ public class SbtRunnerRunType extends RunType {
         return "";
     }
 
+    @NotNull
     @Override
     public List<Requirement> getRunnerSpecificRequirements(@NotNull final Map<String, String> runParameters) {
         return Collections.emptyList();
     }
-
 
 }

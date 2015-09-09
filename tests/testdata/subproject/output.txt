@@ -1,0 +1,2 @@
+##teamcity\[compilationStarted compiler='Scala compiler'\]
+##teamcity\[compilationFinished compiler='Scala compiler'\]
