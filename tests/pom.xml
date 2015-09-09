@@ -52,6 +52,13 @@
             <version>${teamcity-version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jetbrains.teamcity.idea</groupId>
+            <artifactId>util</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
