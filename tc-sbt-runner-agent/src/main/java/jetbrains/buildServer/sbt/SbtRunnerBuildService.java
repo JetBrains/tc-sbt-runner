@@ -307,7 +307,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, name));
             return commands;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage(), e);
             return Collections.emptyList();
         }
     }
