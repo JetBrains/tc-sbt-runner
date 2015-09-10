@@ -47,6 +47,13 @@
         <processorPath useClasspath="true" />
         <module name="tc-sbt-runner-server" />
       </profile>
+      <profile default="false" name="Annotation profile for tc-sbt-runner-tests" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="tc-sbt-runner-tests" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="build" target="1.5" />
@@ -54,6 +61,7 @@
       <module name="tc-sbt-runner-agent" target="1.5" />
       <module name="tc-sbt-runner-common" target="1.5" />
       <module name="tc-sbt-runner-server" target="1.5" />
+      <module name="tc-sbt-runner-tests" target="1.5" />
       <module name="tests" target="1.5" />
     </bytecodeTargetLevel>
   </component>
