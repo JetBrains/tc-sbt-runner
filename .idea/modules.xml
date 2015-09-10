@@ -7,8 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/tc-sbt-runner-agent/tc-sbt-runner-agent.iml" filepath="$PROJECT_DIR$/tc-sbt-runner-agent/tc-sbt-runner-agent.iml" />
       <module fileurl="file://$PROJECT_DIR$/tc-sbt-runner-common/tc-sbt-runner-common.iml" filepath="$PROJECT_DIR$/tc-sbt-runner-common/tc-sbt-runner-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/tc-sbt-runner-server/tc-sbt-runner-server.iml" filepath="$PROJECT_DIR$/tc-sbt-runner-server/tc-sbt-runner-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tests/tc-sbt-runner-tests.iml" filepath="$PROJECT_DIR$/tests/tc-sbt-runner-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/tests/tests.iml" filepath="$PROJECT_DIR$/tests/tests.iml" />
     </modules>
   </component>
 </project>
+

@@ -119,7 +119,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         Map<String, String> envVars = new HashMap<String, String>(getEnvironmentVariables());
 
         envVars.put(SbtRunnerConstants.SBT_HOME, sbtHome);
-        envVars.put(JavaRunnerConstants.JAVA_HOME, javaHome);
+        envVars.put(JavaRunnerConstants.JAVA_HOME, sbtHome);
         cliBuilder.setEnvVariables(envVars);
 
         cliBuilder.setJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerParameters()));

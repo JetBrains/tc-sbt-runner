@@ -89,4 +89,10 @@ public class SbtRunnerTypeTest extends BaseTestCase {
         doTestValidator(params(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto"), s());
     }
 
+    @Test
+    public void test_LogLevel() {
+
+    }
+
+
 }

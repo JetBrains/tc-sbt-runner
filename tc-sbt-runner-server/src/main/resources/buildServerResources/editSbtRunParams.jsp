@@ -52,7 +52,7 @@
     </script>
 
 </l:settingsGroup>
-<l:settingsGroup title="Java Parameters">
+<l:settingsGroup title="Java Parameters" className="advancedSetting">
     <props:editJavaHome/>
     <props:editJvmArgs/>
 </l:settingsGroup>
