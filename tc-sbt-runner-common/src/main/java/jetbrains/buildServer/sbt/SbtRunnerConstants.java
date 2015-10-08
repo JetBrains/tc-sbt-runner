@@ -19,5 +19,4 @@ public interface SbtRunnerConstants {
   String DEFAULT_VALUE = "-Xmx512m -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m";
   String TEAMCITY_SBT_DEFAULT_JVM_ARGS_PROPERTY = "teamcity.sbt.defaultJvmArgs";
   String DEFAULT_SBT_COMMANDS = "clean compile test";
-  String DEFAULT_SBT_JDK = "%env.JDK_16%";
 }

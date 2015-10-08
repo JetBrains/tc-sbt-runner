@@ -57,7 +57,6 @@ public class SbtRunnerRunType extends RunType {
         return new HashMap<String, String>() {{
             put(SbtRunnerConstants.SBT_ARGS_PARAM, SbtRunnerConstants.DEFAULT_SBT_COMMANDS);
             put(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, SbtRunnerConstants.AUTO_INSTALL_FLAG);
-            put("target.jdk.home", SbtRunnerConstants.DEFAULT_SBT_JDK);
             put("jvmArgs", SBT_JVM_ARGS);
         }};
     }
