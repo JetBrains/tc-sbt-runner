@@ -1,7 +1,9 @@
 SBT runner for TeamCity
 =============
 
-This plugin provides support for running SBT build on TeamCity build server. More information could be found [here](http://confluence.jetbrains.com/display/TW/SBT+Runner+Plugin).
+This plugin provides support for running SBT build on TeamCity build server. 
+
+The plugin is bundled since TeamCity 9.1 and is described in the recent [TeamCity documentation](https://confluence.jetbrains.com/display/TCDL/Simple+Build+Tool+%28Scala%29).
 
 Ready to use packages can be downloaded for two versions of TeamCity.
 
