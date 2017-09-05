@@ -8,13 +8,10 @@ import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
-import jetbrains.buildServer.util.PropertiesUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.jar.JarFile;
@@ -116,27 +113,11 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
         List<String> jvmArgs = JavaRunnerUtil.extractJvmArgs(getRunnerParameters());
 
+        String mainClassName = isAutoInstallMode() ? installSbt() : getMainClassName();
 
-        SBTVersion sbtVersion = discoverSbtVersion();
+        SBTVersion sbtVersion = SbtVersionDetector.discoverSbtVersion(getWorkingDirectory(), getSbtLauncher(), jvmArgs, getLogger());
 
-        if (sbtVersion != null){
-            getLogger().message("SBT version was discovered in build.properties file");
-        } else {
-            sbtVersion = discoverSbtVersion(jvmArgs);
-        }
-
-        if (sbtVersion == null) {
-            sbtVersion = SBTVersion.SBT_0_13_x;
-            getLogger().message("SBT version was not discovered neither from JVM arguments nor from project sources, will use: " + sbtVersion);
-        } else {
-            getLogger().message("Detected SBT version: " + sbtVersion);
-        }
-
-        String mainClassName = isAutoInstallMode() ? installSbt(sbtVersion) : getMainClassName();
-
-        if (!isAutoInstallMode()) {
-            copySbtTcLogger(sbtVersion);
-        }
+        copySbtTcLogger(sbtVersion);
 
         String javaHome = getJavaHome();
         String sbtHome = getSbtHome();
@@ -169,46 +150,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         cliBuilder.setWorkingDir(getWorkingDirectory().getAbsolutePath());
 
         return buildCommandline(cliBuilder);
-    }
-
-    @Nullable
-    private SBTVersion discoverSbtVersion(List<String> jvmArgs) {
-        if (jvmArgs == null) {
-            return null;
-        }
-        for (String jvmArg : jvmArgs) {
-            if (jvmArg.startsWith("-Dsbt.version")) {
-                int i = jvmArg.indexOf("=");
-                String version = jvmArg.substring(i + 1);
-                return getVersionFromString(version);
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    private SBTVersion getVersionFromString(@Nullable String version) {
-        if (StringUtil.isEmpty(version)) {
-            return null;
-        }
-        getLogger().message("SBT version discovered: " + version);
-        return version.trim().startsWith("1.") ? SBTVersion.SBT_1_x : SBTVersion.SBT_0_13_x;
-    }
-
-
-    @Nullable
-    private SBTVersion discoverSbtVersion() {
-        try {
-            File file = new File(getWorkingDirectory() + File.separator + "project" + File.separator + "build.properties");
-            Properties properties = PropertiesUtil.loadProperties(file);
-            String property = properties.getProperty("sbt.version");
-            return getVersionFromString(property);
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (Exception e) {
-            getLogger().warning("An error occurred during SBT version check: " + e.getMessage());
-            return null;
-        }
     }
 
     private String getApplyCommand(SBTVersion sbtVersion) {
@@ -245,13 +186,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         }
     }
 
-    private String installSbt(SBTVersion sbtVersion) {
+    private String installSbt() {
 
         try {
             getLogger().activityStarted(SBT_INSTALLATION_STEP_NAME, "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
             getLogger().message("SBT will be install to: " + getAutoInstallSbtFolder());
             copyResources("/" + SBT_DISTRIB + "/", SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin"));
-            copySbtTcLogger(sbtVersion);
             getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
         } catch (Exception e) {
