@@ -207,8 +207,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         try {
             getLogger().activityStarted(SBT_TEAMCITY_LOGGER_INSTALLATION, BUILD_ACTIVITY_TYPE);
             String to = getAutoInstallSbtFolder() + File.separator + getPatchFolder(sbtVersion);
-            String from = File.separator + SBT_DISTRIB + File.separator
-                    + (sbtVersion == SBTVersion.SBT_1_x ? SBT_1_0_PATCH_FOLDER_NAME + File.separator : "");
+            String from = "/"  + SBT_DISTRIB + "/"
+                    + (sbtVersion == SBTVersion.SBT_1_x ? SBT_1_0_PATCH_FOLDER_NAME + "/" : "");
             getLogger().message(String.format("SBT logger %s will be installed from %s to %s", SBT_PATCH_JAR_NAME, from, to));
             copyResources(from, SBT_PATCH_JAR_NAME, new File(to));
         } catch (Exception e) {
