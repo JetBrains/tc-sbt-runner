@@ -8,10 +8,13 @@ import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.PropertiesUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.jar.JarFile;
@@ -28,6 +31,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String SBT_PATCH_FOLDER_NAME = "tc_plugin";
 
+    private static final String SBT_1_0_PATCH_FOLDER_NAME = "1.0";
+
     private static final String SBT_DISTRIB = "sbt-distrib";
 
     private static final String SBT_AUTO_HOME_FOLDER = "agent-sbt";
@@ -41,6 +46,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private static final String SBT_INSTALLATION_STEP_NAME = "SBT installation";
 
     private static final String SBT_TEAMCITY_LOGGER_INSTALLATION = "SBT TeamCity logger installation";
+
+    private static final String PATH = "PATH";
 
     private final static String[] SBT_JARS = new String[]{
             SBT_LAUNCHER_JAR_NAME,
@@ -56,6 +63,11 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
 
     private final IvyCacheProvider myIvyCacheProvider;
+
+    public enum SBTVersion {
+        SBT_1_x,
+        SBT_0_13_x
+    }
 
     public SbtRunnerBuildService(IvyCacheProvider ivyCacheProvider) {
         myIvyCacheProvider = ivyCacheProvider;
@@ -102,10 +114,30 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     @Override
     public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
 
-        String mainClassName = isAutoInstallMode() ? installSbt() : getMainClassName();
-        if (!isAutoInstallMode()) {
-            copySbtTcLogger();
+        List<String> jvmArgs = JavaRunnerUtil.extractJvmArgs(getRunnerParameters());
+
+
+        SBTVersion sbtVersion = discoverSbtVersion();
+
+        if (sbtVersion != null){
+            getLogger().message("SBT version was discovered in build.properties file");
+        } else {
+            sbtVersion = discoverSbtVersion(jvmArgs);
         }
+
+        if (sbtVersion == null) {
+            sbtVersion = SBTVersion.SBT_0_13_x;
+            getLogger().message("SBT version was not discovered neither from JVM arguments nor from project sources, will use: " + sbtVersion);
+        } else {
+            getLogger().message("Detected SBT version: " + sbtVersion);
+        }
+
+        String mainClassName = isAutoInstallMode() ? installSbt(sbtVersion) : getMainClassName();
+
+        if (!isAutoInstallMode()) {
+            copySbtTcLogger(sbtVersion);
+        }
+
         String javaHome = getJavaHome();
         String sbtHome = getSbtHome();
         getLogger().message("Java home set to: " + javaHome);
@@ -120,22 +152,67 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
         envVars.put(SbtRunnerConstants.SBT_HOME, sbtHome);
         envVars.put(JavaRunnerConstants.JAVA_HOME, javaHome);
+
+        String path = envVars.get(PATH);
+        envVars.put(PATH, javaHome + (!StringUtil.isEmpty(path) ? File.pathSeparator + path : ""));
+
         cliBuilder.setEnvVariables(envVars);
 
-        cliBuilder.setJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerParameters()));
+
+        cliBuilder.setJvmArgs(jvmArgs);
         cliBuilder.setClassPath(getClasspath());
         cliBuilder.setMainClass(mainClassName);
 
 
-        cliBuilder.setProgramArgs(getCommands());
+        cliBuilder.setProgramArgs(getCommands(sbtVersion));
 
         cliBuilder.setWorkingDir(getWorkingDirectory().getAbsolutePath());
 
         return buildCommandline(cliBuilder);
     }
 
-    private String getApplyCommand() {
-        String pathToPlugin = new File(getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME + File.separator + SBT_PATCH_JAR_NAME).getAbsolutePath();
+    @Nullable
+    private SBTVersion discoverSbtVersion(List<String> jvmArgs) {
+        if (jvmArgs == null) {
+            return null;
+        }
+        for (String jvmArg : jvmArgs) {
+            if (jvmArg.startsWith("-Dsbt.version")) {
+                int i = jvmArg.indexOf("=");
+                String version = jvmArg.substring(i + 1);
+                return getVersionFromString(version);
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private SBTVersion getVersionFromString(@Nullable String version) {
+        if (StringUtil.isEmpty(version)) {
+            return null;
+        }
+        getLogger().message("SBT version discovered: " + version);
+        return version.trim().startsWith("1.") ? SBTVersion.SBT_1_x : SBTVersion.SBT_0_13_x;
+    }
+
+
+    @Nullable
+    private SBTVersion discoverSbtVersion() {
+        try {
+            File file = new File(getWorkingDirectory() + File.separator + "project" + File.separator + "build.properties");
+            Properties properties = PropertiesUtil.loadProperties(file);
+            String property = properties.getProperty("sbt.version");
+            return getVersionFromString(property);
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (Exception e) {
+            getLogger().warning("An error occurred during SBT version check: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private String getApplyCommand(SBTVersion sbtVersion) {
+        String pathToPlugin = new File(getAutoInstallSbtFolder() + File.separator + getPatchFolder(sbtVersion) + File.separator + SBT_PATCH_JAR_NAME).getAbsolutePath();
         return "apply -cp " + pathToPlugin + " " + SBT_PATCH_CLASS_NAME;
     }
 
@@ -168,13 +245,13 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         }
     }
 
-    private String installSbt() {
+    private String installSbt(SBTVersion sbtVersion) {
 
         try {
             getLogger().activityStarted(SBT_INSTALLATION_STEP_NAME, "'Auto' mode was selected in SBT runner plugin settings", BUILD_ACTIVITY_TYPE);
             getLogger().message("SBT will be install to: " + getAutoInstallSbtFolder());
             copyResources("/" + SBT_DISTRIB + "/", SBT_LAUNCHER_JAR_NAME, new File(getAutoInstallSbtFolder() + File.separator + "bin"));
-            copySbtTcLogger();
+            copySbtTcLogger(sbtVersion);
             getLogger().message("SBT home set to: " + getSbtHome());
             return getMainClassName();
         } catch (Exception e) {
@@ -186,12 +263,14 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     }
 
-    private void copySbtTcLogger() {
+    private void copySbtTcLogger(SBTVersion sbtVersion) {
         try {
             getLogger().activityStarted(SBT_TEAMCITY_LOGGER_INSTALLATION, BUILD_ACTIVITY_TYPE);
-            String path = getAutoInstallSbtFolder() + File.separator + SBT_PATCH_FOLDER_NAME;
-            getLogger().message("sbt-teamcity-logger.jar will be installed to: " + path);
-            copyResources("/" + SBT_DISTRIB + "/", SBT_PATCH_JAR_NAME, new File(path));
+            String to = getAutoInstallSbtFolder() + File.separator + getPatchFolder(sbtVersion);
+            String from = File.separator + SBT_DISTRIB + File.separator
+                    + (sbtVersion == SBTVersion.SBT_1_x ? SBT_1_0_PATCH_FOLDER_NAME + File.separator : "");
+            getLogger().message(String.format("SBT logger %s will be installed from %s to %s", SBT_PATCH_JAR_NAME, from, to));
+            copyResources(from, SBT_PATCH_JAR_NAME, new File(to));
         } catch (Exception e) {
             getLogger().internalError(ErrorData.PREPARATION_FAILURE_TYPE, "An error occurred during SBT installation", e);
             throw new IllegalStateException(e);
@@ -199,6 +278,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().activityFinished(SBT_TEAMCITY_LOGGER_INSTALLATION, BUILD_ACTIVITY_TYPE);
         }
 
+    }
+
+    @NotNull
+    private String getPatchFolder(SBTVersion sbtVersion) {
+        return sbtVersion == SBTVersion.SBT_1_x ?
+                SBT_PATCH_FOLDER_NAME + File.separator + SBT_1_0_PATCH_FOLDER_NAME : SBT_PATCH_FOLDER_NAME;
     }
 
     @NotNull
@@ -274,7 +359,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     }
 
     @NotNull
-    public List<String> getCommands() {
+    public List<String> getCommands(SBTVersion sbtVersion) {
         String args = getRunnerParameters().get(SbtRunnerConstants.SBT_ARGS_PARAM).trim();
         if (StringUtil.isEmpty(args)) {
             getLogger().warning("No commands specified.");
@@ -282,21 +367,21 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         }
 
         if (args.startsWith(";")) {
-            return getCommandsFromFile(args);
+            return getCommandsFromFile(args, sbtVersion);
         }
-        return getInlinedCommands(args);
+        return getInlinedCommands(args, sbtVersion);
     }
 
     @NotNull
-    private List<String> getInlinedCommands(@NotNull String args) {
-        return CommandLineArgumentsUtil.extractArguments(String.format(INLINE_COMMANDS_FORMATTER, getApplyCommand(), getCheckStatusCommand(), args));
+    private List<String> getInlinedCommands(@NotNull String args, SBTVersion sbtVersion) {
+        return CommandLineArgumentsUtil.extractArguments(String.format(INLINE_COMMANDS_FORMATTER, getApplyCommand(sbtVersion), getCheckStatusCommand(), args));
     }
 
     @NotNull
-    private List<String> getCommandsFromFile(@NotNull String args) {
+    private List<String> getCommandsFromFile(@NotNull String args, SBTVersion sbtVersion) {
         try {
             File file = FileUtil.createTempFile(getAgentTempDirectory(), "commands", ".file", true);
-            String content = String.format(INFILE_COMMANDS_FORMATTER, getApplyCommand(), getCheckStatusCommand(), args);
+            String content = String.format(INFILE_COMMANDS_FORMATTER, getApplyCommand(sbtVersion), getCheckStatusCommand(), args);
             String name = file.getAbsolutePath();
             getLogger().activityStarted("Prepare SBT run", "Write commands to file.", BUILD_ACTIVITY_TYPE);
             getLogger().message("File name: " + name);
