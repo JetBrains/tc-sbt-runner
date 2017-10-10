@@ -152,7 +152,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private String getApplyCommand(SBTVersion sbtVersion) {
         String pathToPlugin = new File(getAutoInstallSbtFolder() + File.separator + getPatchFolder(sbtVersion) + File.separator + SBT_PATCH_JAR_NAME).getAbsolutePath();
-        return "apply -cp \"" + pathToPlugin + "\" " + SBT_PATCH_CLASS_NAME;
+        return "apply -cp \"" + pathToPlugin.replace('\\', '/') + "\" " + SBT_PATCH_CLASS_NAME;
     }
 
     private String getCheckStatusCommand() {
@@ -303,7 +303,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().warning("No commands specified.");
             return Collections.emptyList();
         }
-
         return getCommandsFromFile(args, sbtVersion);
     }
 
@@ -311,7 +310,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private List<String> getCommandsFromFile(@NotNull String args, SBTVersion sbtVersion) {
         try {
             File file = FileUtil.createTempFile(getAgentTempDirectory(), "commands", ".file", true);
-            String content = String.format(INFILE_COMMANDS_FORMATTER, getApplyCommand(sbtVersion), getCheckStatusCommand(), args);
+            String content = String.format(INFILE_COMMANDS_FORMATTER, getApplyCommand(sbtVersion), getCheckStatusCommand(), prepareArgs(args));
             String name = file.getAbsolutePath();
             getLogger().activityStarted("Prepare SBT run", "Write commands to file.", BUILD_ACTIVITY_TYPE);
             getLogger().message("File name: " + name);
@@ -319,12 +318,28 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().activityFinished("Prepare SBT run", BUILD_ACTIVITY_TYPE);
             FileUtil.writeFile(file, content, "UTF-8");
             List<String> commands = new ArrayList<String>();
-            commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, name));
+            commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, "\"" + name + "\""));
             return commands;
         } catch (IOException e) {
             LOG.warn(e.getMessage(), e);
             return Collections.emptyList();
         }
+    }
+
+    @NotNull
+    private String prepareArgs(@NotNull String args) {
+        if (args.startsWith(";")) {
+            return args;
+        }
+        StringBuilder argss = new StringBuilder();
+        String[] split = args.split(" ");
+        for (String s : split) {
+            String s1 = s.trim();
+            if (!s1.isEmpty()) {
+                argss.append("\n; ").append(s1);
+            }
+        }
+        return argss.toString();
     }
 
 }
