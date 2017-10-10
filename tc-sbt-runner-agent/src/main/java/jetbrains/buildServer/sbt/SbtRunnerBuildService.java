@@ -5,7 +5,6 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.messages.ErrorData;
-import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
 import org.apache.log4j.Logger;
@@ -18,6 +17,7 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final Logger LOG = Logger.getLogger(SbtRunnerBuildServiceFactory.class.getName());
@@ -33,8 +33,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private static final String SBT_DISTRIB = "sbt-distrib";
 
     private static final String SBT_AUTO_HOME_FOLDER = "agent-sbt";
-
-    private static final String INLINE_COMMANDS_FORMATTER = "\"%s\" %s %s";
 
     private static final String INFILE_COMMANDS_FORMATTER = ";%s\n ;%s %s";
 
@@ -154,7 +152,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private String getApplyCommand(SBTVersion sbtVersion) {
         String pathToPlugin = new File(getAutoInstallSbtFolder() + File.separator + getPatchFolder(sbtVersion) + File.separator + SBT_PATCH_JAR_NAME).getAbsolutePath();
-        return "apply -cp " + pathToPlugin + " " + SBT_PATCH_CLASS_NAME;
+        return "apply -cp \"" + pathToPlugin + "\" " + SBT_PATCH_CLASS_NAME;
     }
 
     private String getCheckStatusCommand() {
@@ -207,7 +205,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         try {
             getLogger().activityStarted(SBT_TEAMCITY_LOGGER_INSTALLATION, BUILD_ACTIVITY_TYPE);
             String to = getAutoInstallSbtFolder() + File.separator + getPatchFolder(sbtVersion);
-            String from = "/"  + SBT_DISTRIB + "/"
+            String from = "/" + SBT_DISTRIB + "/"
                     + (sbtVersion == SBTVersion.SBT_1_x ? SBT_1_0_PATCH_FOLDER_NAME + "/" : "");
             getLogger().message(String.format("SBT logger %s will be installed from %s to %s", SBT_PATCH_JAR_NAME, from, to));
             copyResources(from, SBT_PATCH_JAR_NAME, new File(to));
@@ -306,15 +304,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             return Collections.emptyList();
         }
 
-        if (args.startsWith(";")) {
-            return getCommandsFromFile(args, sbtVersion);
-        }
-        return getInlinedCommands(args, sbtVersion);
-    }
-
-    @NotNull
-    private List<String> getInlinedCommands(@NotNull String args, SBTVersion sbtVersion) {
-        return CommandLineArgumentsUtil.extractArguments(String.format(INLINE_COMMANDS_FORMATTER, getApplyCommand(sbtVersion), getCheckStatusCommand(), args));
+        return getCommandsFromFile(args, sbtVersion);
     }
 
     @NotNull
