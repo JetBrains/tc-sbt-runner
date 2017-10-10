@@ -42,6 +42,11 @@ public class SbtVersionDetector {
         String version = readFromProjectProperties(workingDirectory, logger);
 
         if (version == null) {
+            logger.message("Will read SBT version from additional arguments");
+            version = readFromJavaArguments(jvmArgs);
+        }
+
+        if (version == null) {
             logger.message("Will read SBT version from " + sbtLauncher);
             Map<String, String> map = readSectionFromBootPropertiesOf(sbtLauncher, "app");
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -49,12 +54,6 @@ public class SbtVersionDetector {
             }
             version = getSbtVersionFromProperties(map);
         }
-
-        if (version == null) {
-            logger.message("Will read SBT version from additional arguments");
-            version = readFromJavaArguments(jvmArgs);
-        }
-
 
         if (version == null) {
             logger.message("SBT version was not found");
