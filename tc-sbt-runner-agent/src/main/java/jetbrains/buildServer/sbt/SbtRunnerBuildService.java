@@ -1,5 +1,6 @@
 package jetbrains.buildServer.sbt;
 
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
@@ -34,7 +35,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
     private static final String SBT_AUTO_HOME_FOLDER = "agent-sbt";
 
-    private static final String INFILE_COMMANDS_FORMATTER = ";%s\n ;%s %s";
+    private static final String INFILE_COMMANDS_FORMATTER = ";%s ;%s %s";
 
     private static final String RUN_INFILE_COMMANDS_FORMATTER = "< %s";
 
@@ -141,7 +142,6 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         cliBuilder.setJvmArgs(jvmArgs);
         cliBuilder.setClassPath(getClasspath());
         cliBuilder.setMainClass(mainClassName);
-
 
         cliBuilder.setProgramArgs(getCommands(sbtVersion));
 
@@ -313,12 +313,12 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             String content = String.format(INFILE_COMMANDS_FORMATTER, getApplyCommand(sbtVersion), getCheckStatusCommand(), prepareArgs(args));
             String name = file.getAbsolutePath();
             getLogger().activityStarted("Prepare SBT run", "Write commands to file.", BUILD_ACTIVITY_TYPE);
-            getLogger().message("File name: " + name);
-            getLogger().message("File content:\n" + content);
+            getLogger().message("File name: " + name + "; content: " + content);
             getLogger().activityFinished("Prepare SBT run", BUILD_ACTIVITY_TYPE);
             FileUtil.writeFile(file, content, "UTF-8");
             List<String> commands = new ArrayList<String>();
-            commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, "\"" + name + "\""));
+            String fileNameQuotes = SystemInfo.isWindows ? "\"\"" : "\"";
+            commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, fileNameQuotes + name.replace('\\', '/') + fileNameQuotes));
             return commands;
         } catch (IOException e) {
             LOG.warn(e.getMessage(), e);
