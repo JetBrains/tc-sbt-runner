@@ -1,6 +1,6 @@
 package jetbrains.buildServer.sbt;
 
-import com.intellij.openapi.util.text.StringUtil;
+import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.requirements.Requirement;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
@@ -31,8 +31,8 @@ public class SbtRunnerRunType extends RunType {
                 if (!SbtRunnerConstants.AUTO_INSTALL_FLAG.equalsIgnoreCase(props.get(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM)) && StringUtil.isEmptyOrSpaces(props.get(SbtRunnerConstants.SBT_HOME_PARAM))) {
                     errors.add(new InvalidProperty(SbtRunnerConstants.SBT_HOME_PARAM, "SBT home path must be specified"));
                 }
-                String args = props.get(SbtRunnerConstants.SBT_ARGS_PARAM).trim();
-                if (StringUtil.isEmpty(args)) {
+                String args = props.get(SbtRunnerConstants.SBT_ARGS_PARAM);
+                if (StringUtil.isEmptyOrSpaces(args)) {
                     errors.add(new InvalidProperty(SbtRunnerConstants.SBT_ARGS_PARAM, "SBT commands must be specified"));
                 }
                 return errors;
