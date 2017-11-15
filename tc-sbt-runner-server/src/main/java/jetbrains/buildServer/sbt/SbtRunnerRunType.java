@@ -29,7 +29,11 @@ public class SbtRunnerRunType extends RunType {
             public Collection<InvalidProperty> process(Map<String, String> props) {
                 List<InvalidProperty> errors = new ArrayList<InvalidProperty>();
                 if (!SbtRunnerConstants.AUTO_INSTALL_FLAG.equalsIgnoreCase(props.get(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM)) && StringUtil.isEmptyOrSpaces(props.get(SbtRunnerConstants.SBT_HOME_PARAM))) {
-                    errors.add(new InvalidProperty(SbtRunnerConstants.SBT_HOME_PARAM, "Sbt home path must be specified"));
+                    errors.add(new InvalidProperty(SbtRunnerConstants.SBT_HOME_PARAM, "SBT home path must be specified"));
+                }
+                String args = props.get(SbtRunnerConstants.SBT_ARGS_PARAM).trim();
+                if (StringUtil.isEmpty(args)) {
+                    errors.add(new InvalidProperty(SbtRunnerConstants.SBT_ARGS_PARAM, "SBT commands must be specified"));
                 }
                 return errors;
             }
