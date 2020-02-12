@@ -23,9 +23,9 @@ public class SbtVersionDetectorTest {
             stream = new FileInputStream(file);
             Map<String, String> map = SbtVersionDetector.readPropertiesFromStream(stream, "app");
             Assert.assertEquals(map.size(), 5);
-            Assert.assertEquals(map.get("version"), "${sbt.version-read(sbt.version)[0.13.5]}");
+            Assert.assertEquals(map.get("version"), "${sbt.version-read(sbt.version)[1.3.8]}");
             String version = SbtVersionDetector.getSbtVersionFromProperties(map);
-            Assert.assertEquals(version, "0.13.5");
+            Assert.assertEquals(version, "1.3.8");
         } catch (Exception e) {
             fail();
         } finally {
@@ -40,7 +40,7 @@ public class SbtVersionDetectorTest {
         File file = new File("testdata/sbtVersionDiscovery/fromLauncher/sbt-launch.jar");
         Map<String, String> map = SbtVersionDetector.readSectionFromBootPropertiesOf(file, "app");
         String version = SbtVersionDetector.getSbtVersionFromProperties(map);
-        Assert.assertEquals(version, "0.13.8");
+        Assert.assertEquals(version, "1.3.8");
     }
 
 
