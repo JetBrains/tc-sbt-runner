@@ -11,4 +11,5 @@
       <url>http://www.jetbrains.com</url>
     </vendor>
   </info>
+  <deployment node-responsibilities-aware="true"/>
 </teamcity-plugin>
