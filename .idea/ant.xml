@@ -2,7 +2,5 @@
 <project version="4">
   <component name="AntConfiguration">
     <buildFile url="file://$PROJECT_DIR$/local_mvn_install.xml" />
-    <buildFile url="file://$PROJECT_DIR$/tc-sbt-runner-agent/src/main/resources/sbt-distrib/sbt-tasks.xml" />
   </component>
 </project>
-
