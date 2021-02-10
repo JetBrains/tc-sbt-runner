@@ -22,7 +22,7 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span id="sbt_installation_info" class="smallNote" style="display: inline;">TeamCity bundled SBT launcher will be used (version 1.3.8)</span>
+            <span id="sbt_installation_info" class="smallNote" style="display: inline;">TeamCity bundled SBT launcher will be used (version 1.4.7)</span>
             <span><bs:help file="Simple+Build+Tool+(Scala)"/></span>
         </td>
     </tr>
