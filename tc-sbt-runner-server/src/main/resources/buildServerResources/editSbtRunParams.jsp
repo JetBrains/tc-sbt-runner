@@ -44,7 +44,7 @@
             }
             else {
                 BS.Util.hide("sbt.home_selection");
-                $("sbt_installation_info").innerHTML = "TeamCity bundled SBT launcher will be used (version 1.3.8)"
+                $("sbt_installation_info").innerHTML = "TeamCity bundled SBT launcher will be used (version 1.4.7)"
             }
             BS.MultilineProperties.updateVisible();
         };
