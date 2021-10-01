@@ -13,7 +13,11 @@
      <file>
          <source>target/sbt-runner-agent.zip</source>
          <outputDirectory>agent</outputDirectory>
-     </file> 
+     </file>
+     <file>
+         <source>../kotlin-dsl/SBT.xml</source>
+         <outputDirectory>kotlin-dsl</outputDirectory>
+     </file>
   </files>
   <moduleSets>
     <moduleSet>

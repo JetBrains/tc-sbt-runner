@@ -94,5 +94,15 @@ public class SbtRunnerTypeTest extends BaseTestCase {
 
     }
 
+    @Test
+    public void test_remove_sbt_home_in_auto_mode() {
+        Map<String, String> params = params(
+                SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM, "auto",
+                SbtRunnerConstants.SBT_HOME_PARAM, "home"
+        );
+        runType.getRunnerPropertiesProcessor().process(params);
+        assertFalse(params.containsKey(SbtRunnerConstants.SBT_HOME_PARAM));
+    }
+
 
 }

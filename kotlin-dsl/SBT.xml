@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dsl-extension kind="buildStep" type="SBT" generateDslJar="true">
+    <class name="SimpleBuildTool">
+        <description>
+            A [Simple Build Tool (Scala)](https://www.jetbrains.com/help/teamcity/?Simple+Build+Tool+(Scala))
+            build step running SBT builds.
+        </description>
+    </class>
+    <function name="simpleBuildTool">
+        <description>
+            Adds a [Simple Build Tool (Scala)](https://www.jetbrains.com/help/teamcity/?Simple+Build+Tool+(Scala))
+            build step running SBT builds.
+            @see SimpleBuildTool
+        </description>
+    </function>
+    <params>
+
+        <param name="teamcity.build.workingDir" dslName="workingDir">
+            <description>
+                [Build working directory](https://www.jetbrains.com/help/teamcity/?Build+Working+Directory) for python run,
+                specify it if it is different from the [checkout directory](https://www.jetbrains.com/help/teamcity/?Build+Checkout+Directory).
+            </description>
+        </param>
+
+        <param name="sbt.args" dslName="commands">
+            <description>
+                Commands to execute, e.g. 'clean compile test' or
+                ';clean;set scalaVersion:="2.11.6";compile;test' for commands containing quotes.
+            </description>
+        </param>
+
+        <param name="sbt.installationMode" dslName="installationMode" type="compound">
+            <option name="auto" value="auto">
+                <description>
+                    TeamCity bundled SBT launcher will be used.
+                </description>
+            </option>
+            <option name="custom" value="custom">
+                <description>
+                    The installed SBT will the launched from the SBT home (sbtHome).
+                </description>
+                <param name="sbt.home" dslName="sbtHome" mandatory="true">
+                    <description>
+                        The path to the existing SBT home directory.
+                    </description>
+                </param>
+            </option>
+        </param>
+
+
+        <param name="target.jdk.home" dslName="jdkHome">
+            <description>
+                Specify the path to your custom JDK which will be used to run the build.
+                The default is JAVA_HOME environment variable or the agent's own Java.
+                The value could reference to some environment variable, e.g. "%env.JDK_18%".
+            </description>
+        </param>
+
+        <param name="jvmArgs">
+            <description>
+                Specify the desired Java Virtual Machine parameters,
+                such as maximum heap size or parameters that enable remote debugging.
+                These settings are passed to the JVM used to run your build.
+            </description>
+        </param>
+
+    </params>
+</dsl-extension>

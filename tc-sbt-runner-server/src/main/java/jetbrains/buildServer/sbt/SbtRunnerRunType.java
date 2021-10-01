@@ -31,6 +31,9 @@ public class SbtRunnerRunType extends RunType {
                 if (!SbtRunnerConstants.AUTO_INSTALL_FLAG.equalsIgnoreCase(props.get(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM)) && StringUtil.isEmptyOrSpaces(props.get(SbtRunnerConstants.SBT_HOME_PARAM))) {
                     errors.add(new InvalidProperty(SbtRunnerConstants.SBT_HOME_PARAM, "SBT home path must be specified"));
                 }
+                if (SbtRunnerConstants.AUTO_INSTALL_FLAG.equalsIgnoreCase(props.get(SbtRunnerConstants.SBT_INSTALLATION_MODE_PARAM))) {
+                    props.remove(SbtRunnerConstants.SBT_HOME_PARAM);
+                }
                 return errors;
             }
         };
