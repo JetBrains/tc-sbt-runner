@@ -12,7 +12,7 @@
     <c:choose>
         <c:when test="${propertiesBean.properties['sbt.installationMode']=='auto'}">
             <strong>Auto</strong>
-            <span class="smallNote" style="margin-left: 1em !important;">TeamCity bundled SBT launcher will be used (version 1.4.7)&nbsp;<bs:help file="Simple+Build+Tool+(Scala)"/></span>
+            <span class="smallNote" style="margin-left: 1em !important;">TeamCity bundled SBT launcher will be used (version 1.5.5)&nbsp;<bs:help file="Simple+Build+Tool+(Scala)"/></span>
         </c:when>
         <c:when test="${propertiesBean.properties['sbt.installationMode']=='custom'}">
             <strong>Custom</strong>

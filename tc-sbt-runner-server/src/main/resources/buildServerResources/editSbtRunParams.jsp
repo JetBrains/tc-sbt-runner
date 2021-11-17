@@ -22,7 +22,7 @@
                 <props:option value="auto">&lt;Auto&gt;</props:option>
                 <props:option value="custom">&lt;Custom&gt;</props:option>
             </props:selectProperty>
-            <span id="sbt_installation_info" class="smallNote" style="display: inline;">TeamCity bundled SBT launcher will be used (version 1.4.7)</span>
+            <span id="sbt_installation_info" class="smallNote" style="display: inline;">TeamCity bundled SBT launcher will be used (version 1.5.5)</span>
             <span><bs:help file="Simple+Build+Tool+(Scala)"/></span>
         </td>
     </tr>
@@ -44,7 +44,7 @@
             }
             else {
                 BS.Util.hide("sbt.home_selection");
-                $("sbt_installation_info").innerHTML = "TeamCity bundled SBT launcher will be used (version 1.4.7)"
+                $("sbt_installation_info").innerHTML = "TeamCity bundled SBT launcher will be used (version 1.5.5)"
             }
             BS.MultilineProperties.updateVisible();
         };
