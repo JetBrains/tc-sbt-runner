@@ -65,4 +65,38 @@
         </param>
 
     </params>
+
+    <examples>
+        <example>
+            <description>
+                Adds a Simple Build Tool (Scala) build step with default parameters and Java setup.
+            </description>
+            <code>
+                simpleBuildTool {
+                    name = "My SBT step"
+                    commands = "compile test"
+                }
+            </code>
+        </example>
+        <example>
+            <description>
+                Adds a Simple Build Tool (Scala) build step with
+                custom [working directory](https://www.jetbrains.com/help/teamcity/?Build+Working+Directory),
+                custom [installation mode](https://www.jetbrains.com/help/teamcity/?Simple+Build+Tool+(Scala)#SBT+parameters),
+                and [Java parameters](https://www.jetbrains.com/help/teamcity/?Simple+Build+Tool+(Scala)#Java+Parameters).
+            </description>
+            <code>
+                simpleBuildTool {
+                    name = "My SBT step"
+                    workingDir = "project/"
+                    commands = "compile test"
+                    installationMode = custom {
+                        sbtHome = "path/to/sbt/home"
+                    }
+                    jdkHome = "%env.JDK_11_0%"
+                    jvmArgs = "-Xmx512m"
+                }
+            </code>
+        </example>
+    </examples>
 </dsl-extension>
