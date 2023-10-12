@@ -100,10 +100,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:resources_en:95.677" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:common-api:2020.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-codec:commons-codec:1.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.ws.xmlrpc:xmlrpc:2.0.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity:serviceMessages:2020.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.teamcity.idea:obsolete-openapi:2020.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: jaxen:jaxen:1.1.1" level="project" />
