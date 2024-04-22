@@ -8,8 +8,16 @@
     <packaging>pom</packaging>
     <properties>
         <teamcity-version>${teamcityVersion}</teamcity-version>
+        <local.repo.path>local-repo</local.repo.path>
     </properties>
     <repositories>
+        <repository>
+            <id>local-teamcity-artifacts</id>
+            <url>file://${local.repo.path}</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>JetBrains</id>
             <url>https://download.jetbrains.com/teamcity-repository</url>
