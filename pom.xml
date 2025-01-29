@@ -8,7 +8,8 @@
     <packaging>pom</packaging>
     <properties>
         <teamcity-version>${teamcityVersion}</teamcity-version>
-        <local.repo.path>local-repo</local.repo.path>
+        <local.repo.path>${TC_LOCAL_REPO}</local.repo.path>
+        <TC_LOCAL_REPO>local-repo</TC_LOCAL_REPO>
     </properties>
     <repositories>
         <repository>

@@ -91,7 +91,57 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.7.0</version>
+                <!-- Refer to Publish_SbtLogger -->
+                <executions>
+                    <execution>
+                        <id>copy-sbt-logger-1.0</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${build.outputDirectory}/sbt-distrib/1.0</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jetbrains.teamcity.plugins.sbt</groupId>
+                                    <artifactId>sbt-teamcity-logger</artifactId>
+                                    <version>1.0</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-sbt-logger-0.13</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${build.outputDirectory}/sbt-distrib</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jetbrains.teamcity.plugins.sbt</groupId>
+                                    <artifactId>sbt-teamcity-logger</artifactId>
+                                    <version>0.13</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>teamcity-space</id>
+            <url>https://packages.jetbrains.team/maven/p/tc/maven</url>
+        </repository>
+    </repositories>
 </project>
