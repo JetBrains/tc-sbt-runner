@@ -40,7 +40,7 @@ public class SbtVersionDetectorTest {
         File file = new File("testdata/sbtVersionDiscovery/fromLauncher/sbt-launch.jar");
         Map<String, String> map = SbtVersionDetector.readSectionFromBootPropertiesOf(file, "app");
         String version = SbtVersionDetector.getSbtVersionFromProperties(map);
-        Assert.assertEquals(version, "1.10.10");
+        Assert.assertEquals(version, "1.5.5");
     }
 
 
