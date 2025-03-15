@@ -8,6 +8,7 @@ import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,6 +60,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
 
     private final IvyCacheProvider myIvyCacheProvider;
+
+    private final List<File> myFilesToDelete = new ArrayList<>();
 
     public enum SBTVersion {
         SBT_1_x,
@@ -135,6 +138,8 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
 
         String path = envVars.get(PATH);
         envVars.put(PATH, javaHome + (!StringUtil.isEmpty(path) ? File.pathSeparator + path : ""));
+
+        fixSbtSocketLengthIssueIfNeeded(envVars);
 
         cliBuilder.setEnvVariables(envVars);
 
@@ -342,4 +347,52 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         return argss.toString();
     }
 
+    @Override
+    public void afterProcessFinished() throws RunBuildException {
+        super.afterProcessFinished();
+        if ("false".equalsIgnoreCase(getConfigParameters().get("teamcity.internal.sbt.tempFilesCleanup.enabled"))) {
+            return;
+        }
+        for (File file : myFilesToDelete) {
+            FileUtil.delete(file);
+        }
+        myFilesToDelete.clear();
+    }
+
+    /**
+     * SBT uses either XDG_RUNTIME_DIR env variable or java.io.tmpdir system property to determine its tmp dir.
+     * java.io.tmpdir is equal to the buildTmp and XDG_RUNTIME_DIR is usually empty, so buildTmp is used by default.
+     * We use XDG_RUNTIME_DIR here to override buildTmp in some cases.
+     * ---
+     * Why it's needed?
+     * SBT stores "sbt-load.sock" socket in its tmp dir.
+     * Unix domain sockets have a limitation that the path must be a maximum 108 characters.
+     * The socket has the following path: "<tmpDirPath>/.sbt/sbt-socket<19 digits hash>/sbt-load.sock"
+     * so the max allowed length of the <tmpDirPath> (buildTmp by default) can be 108 - 49 = 59.
+     * ---
+     * This workaround is needed after the upgrade of sbt-launch.jar from 1.5.5 to 1.10.10
+     */
+    private void fixSbtSocketLengthIssueIfNeeded(Map<String, String> envVars) throws RunBuildException {
+        if ("false".equalsIgnoreCase(getConfigParameters().get("teamcity.internal.sbt.setXdgRuntimeDir.enabled"))) {
+            return;
+        }
+        final int maxAllowedTmpDirLength = 59;
+        if (SystemInfo.isWindows || getBuildTempDirectory().getAbsolutePath().length() <= maxAllowedTmpDirLength) {
+            return;
+        }
+        final String xdgRuntimeDir = "XDG_RUNTIME_DIR";
+        if (getEnvironmentVariables().containsKey(xdgRuntimeDir)) { // allow to override the value
+            return;
+        }
+        final String sbtTmpDirPath = "/tmp/teamcity-sbt-" + RandomStringUtils.randomAlphanumeric(6);
+        final File sbtTmpDir = new File(sbtTmpDirPath);
+        try {
+            FileUtil.createDir(sbtTmpDir);
+        } catch (IOException e) {
+            throw new RunBuildException("Failed to create temp directory for SBT at " + sbtTmpDirPath, e);
+        }
+        myFilesToDelete.add(sbtTmpDir);
+        getLogger().message(xdgRuntimeDir + " set to: " + sbtTmpDirPath);
+        envVars.put(xdgRuntimeDir, sbtTmpDirPath);
+    }
 }
