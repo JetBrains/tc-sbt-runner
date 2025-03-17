@@ -366,9 +366,9 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
      * ---
      * Why it's needed?
      * SBT stores "sbt-load.sock" socket in its tmp dir.
-     * Unix domain sockets have a limitation that the path must be a maximum 108 characters.
+     * Unix domain sockets have a limitation that the path must be around 100 characters (usually 107 or 103).
      * The socket has the following path: "<tmpDirPath>/.sbt/sbt-socket<19 digits hash>/sbt-load.sock"
-     * so the max allowed length of the <tmpDirPath> (buildTmp by default) can be 108 - 49 = 59.
+     * so the max allowed length of the <tmpDirPath> (buildTmp by default) can be 103 - 49 = 54.
      * ---
      * This workaround is needed after the upgrade of sbt-launch.jar from 1.5.5 to 1.10.10
      */
@@ -376,23 +376,44 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
         if ("false".equalsIgnoreCase(getConfigParameters().get("teamcity.internal.sbt.setXdgRuntimeDir.enabled"))) {
             return;
         }
-        final int maxAllowedTmpDirLength = 59;
-        if (SystemInfo.isWindows || getBuildTempDirectory().getAbsolutePath().length() <= maxAllowedTmpDirLength) {
-            return;
-        }
         final String xdgRuntimeDir = "XDG_RUNTIME_DIR";
         if (getEnvironmentVariables().containsKey(xdgRuntimeDir)) { // allow to override the value
             return;
         }
-        final String sbtTmpDirPath = "/tmp/teamcity-sbt-" + RandomStringUtils.randomAlphanumeric(6);
-        final File sbtTmpDir = new File(sbtTmpDirPath);
-        try {
-            FileUtil.createDir(sbtTmpDir);
-        } catch (IOException e) {
-            throw new RunBuildException("Failed to create temp directory for SBT at " + sbtTmpDirPath, e);
+        final int maxAllowedTmpDirLength = 54;
+        if (SystemInfo.isWindows || getBuildTempDirectory().getAbsolutePath().length() <= maxAllowedTmpDirLength) {
+            return;
         }
-        myFilesToDelete.add(sbtTmpDir);
-        getLogger().message(xdgRuntimeDir + " set to: " + sbtTmpDirPath);
-        envVars.put(xdgRuntimeDir, sbtTmpDirPath);
+        final String ourSubDir = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
+        final String tmpDirEnv = firstNonEmptyEnvVariableOrNull("TMPDIR", "TEMP", "TMP");
+        final String tmpDirRoot;
+        if (tmpDirEnv != null && tmpDirEnv.length() <= maxAllowedTmpDirLength - ourSubDir.length()) {
+            if (tmpDirEnv.endsWith("/")) {
+                tmpDirRoot = tmpDirEnv.substring(0, tmpDirEnv.length() - 1);
+            } else {
+                tmpDirRoot = tmpDirEnv;
+            }
+        } else {
+            tmpDirRoot = "/tmp";
+        }
+        final File tmpDir = new File(tmpDirRoot, ourSubDir);
+        try {
+            FileUtil.createDir(tmpDir);
+        } catch (IOException e) {
+            throw new RunBuildException("Failed to create temp directory for SBT at " + tmpDir.getAbsolutePath(), e);
+        }
+        myFilesToDelete.add(tmpDir);
+        getLogger().message(xdgRuntimeDir + " set to: " + tmpDir.getAbsolutePath());
+        envVars.put(xdgRuntimeDir, tmpDir.getAbsolutePath());
+    }
+
+    private static String firstNonEmptyEnvVariableOrNull(String... envVars) {
+        for (String envVar : envVars) {
+            final String value = System.getenv(envVar);
+            if (!StringUtil.isEmptyOrSpaces(value)) {
+                return value;
+            }
+        }
+        return null;
     }
 }
