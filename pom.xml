@@ -43,8 +43,8 @@
                     <configuration>
                         <thirdPartyFilename>third-party-libraries.json</thirdPartyFilename>
                         <fileTemplate>${maven.multiModuleProjectDirectory}/license-third-party.ftl</fileTemplate>
-                        <excludedGroups>tc-sbt-runner.*|com.jetbrains.teamcity.*|org.jetbrains.teamcity.*|org.jetbrains.kotlin.*|org.jetbrains.kotlinx.*|org.jetbrains.intellij.*|com.jetbrains.intellij.*|jetbrains.ring.*</excludedGroups>
-                        <excludedArtifacts>jcip-annotations</excludedArtifacts>
+           		 		<excludedGroups>com.jetbrains.teamcity.*|org.jetbrains.teamcity.*|org.jetbrains.kotlin.*|org.jetbrains.kotlinx.*|org.jetbrains.intellij.*|com.jetbrains.intellij.*|jetbrains.ring.*|jmock|junit|org.jmock|org.hamcrest|org.mockito</excludedGroups>
+            			<excludedArtifacts>jcip-annotations|jcommander|assertj-core|hamcrest-library</excludedArtifacts>
                         <force>true</force>
                         <includedScopes>compile,runtime</includedScopes>
                     </configuration>
