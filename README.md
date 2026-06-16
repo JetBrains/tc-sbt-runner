@@ -24,15 +24,15 @@ dependencies, repositories, and compiler settings; generated `.iml` files and lo
 ignored.
 
 ## Building the plugin
-Run 'mvn package' command from the root project to build your plugin.
-The resulting package tc-sbt-runner.zip will be placed in the 'target' directory.
+Run `./mvnw package` from the root project to build your plugin.
+The resulting package `tc-sbt-runner.zip` will be placed in the `target` directory.
 
-The project compiles Java 8-compatible bytecode. By default, the Maven build uses TeamCity `2023.05`
+The project compiles Java 8-compatible bytecode. By default, the Maven build uses TeamCity `2026.1`
 artifacts and a timestamped plugin version.
 Override them when building against another TeamCity baseline:
 
 ```
-mvn package -DteamcityVersion=2024.12 -DteamcityPluginVersion=dev
+./mvnw package -DteamcityVersion=2026.1 -DteamcityPluginVersion=dev
 ```
 
 ## Installing the plugin
