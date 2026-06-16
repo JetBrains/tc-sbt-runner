@@ -3,6 +3,7 @@ target/
 target/*
 .idea/workspace.xml
 .idea/modules.xml
+.idea/ant.xml
 .idea/libraries/
 .idea/compiler.xml
 .idea/jarRepositories.xml
