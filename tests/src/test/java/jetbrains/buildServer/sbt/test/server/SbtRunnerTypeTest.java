@@ -101,7 +101,7 @@ public class SbtRunnerTypeTest extends BaseTestCase {
                 SbtRunnerConstants.SBT_HOME_PARAM, "home"
         );
         runType.getRunnerPropertiesProcessor().process(params);
-        assertFalse(params.containsKey(SbtRunnerConstants.SBT_HOME_PARAM));
+        Assert.assertFalse(params.containsKey(SbtRunnerConstants.SBT_HOME_PARAM));
     }
 
 

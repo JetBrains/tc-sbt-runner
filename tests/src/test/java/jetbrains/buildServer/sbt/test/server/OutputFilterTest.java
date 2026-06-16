@@ -2,7 +2,7 @@ package jetbrains.buildServer.sbt.test.server;
 
 import jetbrains.buildServer.sbt.SbtRunnerBuildService;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class OutputFilterTest {

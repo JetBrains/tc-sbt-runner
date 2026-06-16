@@ -2,16 +2,14 @@ package jetbrains.buildServer.sbt.test.agent;
 
 import jetbrains.buildServer.sbt.SbtVersionDetector;
 import jetbrains.buildServer.util.FileUtil;
-import org.junit.Test;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
-
-import static org.junit.Assert.fail;
 
 public class SbtVersionDetectorTest {
 
@@ -27,11 +25,10 @@ public class SbtVersionDetectorTest {
             String version = SbtVersionDetector.getSbtVersionFromProperties(map);
             Assert.assertEquals(version, "1.3.8");
         } catch (Exception e) {
-            fail();
+            Assert.fail("Failed to read SBT boot properties", e);
         } finally {
             FileUtil.close(stream);
         }
-
     }
 
 
