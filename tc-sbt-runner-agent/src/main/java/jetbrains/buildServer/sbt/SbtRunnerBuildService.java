@@ -1,13 +1,11 @@
 package jetbrains.buildServer.sbt;
 
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.StringUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -167,7 +165,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
     private String getJavaHome() throws RunBuildException {
         String javaHome = JavaRunnerUtil.findJavaHome(getRunnerParameters().get(JavaRunnerConstants.TARGET_JDK_HOME),
                 getBuildParameters().getAllParameters(),
-                AgentRuntimeProperties.getCheckoutDir(getRunnerParameters()));
+                getCheckoutDirectory().getAbsolutePath());
         if (javaHome == null) throw new RunBuildException("Unable to find Java home");
         javaHome = FileUtil.getCanonicalFile(new File(javaHome)).getPath();
         return javaHome;
@@ -322,7 +320,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             getLogger().activityFinished("Prepare SBT run", BUILD_ACTIVITY_TYPE);
             FileUtil.writeFile(file, content, "UTF-8");
             List<String> commands = new ArrayList<String>();
-            String fileNameQuotes = SystemInfo.isWindows ? "\"\"" : "\"";
+            String fileNameQuotes = File.separatorChar == '\\' ? "\"\"" : "\"";
             commands.add(String.format(RUN_INFILE_COMMANDS_FORMATTER, fileNameQuotes + name.replace('\\', '/') + fileNameQuotes));
             return commands;
         } catch (IOException e) {
@@ -381,7 +379,7 @@ public class SbtRunnerBuildService extends BuildServiceAdapter {
             return;
         }
         final int maxAllowedTmpDirLength = 54;
-        if (SystemInfo.isWindows || getBuildTempDirectory().getAbsolutePath().length() <= maxAllowedTmpDirLength) {
+        if (File.separatorChar == '\\' || getBuildTempDirectory().getAbsolutePath().length() <= maxAllowedTmpDirLength) {
             return;
         }
         final String ourSubDir = RandomStringUtils.randomAlphanumeric(4).toLowerCase();

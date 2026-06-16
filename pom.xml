@@ -22,12 +22,14 @@
         <teamcity-version>${teamcityVersion}</teamcity-version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <teamcityPluginVersion>snapshot-${maven.build.timestamp}</teamcityPluginVersion>
+        <maven.compiler.release>8</maven.compiler.release>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
         <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>
         <maven.replacer.plugin.version>1.5.3</maven.replacer.plugin.version>
         <teamcity.sdk.maven.plugin.version>0.4.3</teamcity.sdk.maven.plugin.version>
+        <jetbrains.annotations.version>13.0</jetbrains.annotations.version>
         <local.repo.path>local-repo</local.repo.path>
     </properties>
     <repositories>
@@ -67,8 +69,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven.compiler.plugin.version}</version>
                     <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
+                        <release>${maven.compiler.release}</release>
                     </configuration>
                 </plugin>
                 <plugin>
