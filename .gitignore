@@ -9,3 +9,4 @@ target/*
 .idea/jarRepositories.xml
 .idea/uiDesigner.xml
 .idea/shelf
+.idea/kotlinc.xml

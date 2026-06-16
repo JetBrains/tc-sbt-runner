@@ -30,9 +30,20 @@
         <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>
         <maven.replacer.plugin.version>1.5.3</maven.replacer.plugin.version>
         <teamcity.sdk.maven.plugin.version>0.4.3</teamcity.sdk.maven.plugin.version>
+        <!-- Pinned to the newest Kotlin Maven plugin version verified locally during the migration planning;
+             it still supports emitting Java 8 bytecode through the existing maven.compiler.release setting. -->
+        <kotlin.version>2.3.21</kotlin.version>
         <jetbrains.annotations.version>13.0</jetbrains.annotations.version>
         <local.repo.path>local-repo</local.repo.path>
     </properties>
+    <dependencies>
+        <!-- Keep the Kotlin runtime explicit so TeamCity plugin server/agent assemblies visibly package it. -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+    </dependencies>
     <repositories>
         <repository>
             <id>local-teamcity-artifacts</id>
@@ -53,7 +64,15 @@
         </pluginRepository>
     </pluginRepositories>
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <extensions>true</extensions>
+            </plugin>
             <plugin>
                 <groupId>org.jetbrains.teamcity</groupId>
                 <artifactId>teamcity-sdk-maven-plugin</artifactId>
