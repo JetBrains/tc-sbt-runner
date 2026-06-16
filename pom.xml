@@ -6,10 +6,22 @@
     <artifactId>tc-sbt-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>tc-sbt-runner-server</module>
+        <module>tc-sbt-runner-agent</module>
+        <module>tc-sbt-runner-common</module>
+        <module>build</module>
+        <module>tests</module>
+    </modules>
+
     <properties>
+        <!-- Default used for local Maven import; CI and release builds can override it with -DteamcityVersion=... -->
+        <teamcityVersion>2023.05</teamcityVersion>
         <teamcity-version>${teamcityVersion}</teamcity-version>
-        <local.repo.path>${TC_LOCAL_REPO}</local.repo.path>
-        <TC_LOCAL_REPO>local-repo</TC_LOCAL_REPO>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <local.repo.path>local-repo</local.repo.path>
     </properties>
     <repositories>
         <repository>
@@ -30,9 +42,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -43,8 +56,10 @@
                     <configuration>
                         <thirdPartyFilename>third-party-libraries.json</thirdPartyFilename>
                         <fileTemplate>${maven.multiModuleProjectDirectory}/license-third-party.ftl</fileTemplate>
-           		 		<excludedGroups>tc-sbt-runner.*|com.jetbrains.teamcity.*|org.jetbrains.teamcity.*|org.jetbrains.kotlin.*|org.jetbrains.kotlinx.*|org.jetbrains.intellij.*|com.jetbrains.intellij.*|jetbrains.ring.*|jmock|junit|org.jmock|org.hamcrest|org.mockito</excludedGroups>
-            			<excludedArtifacts>jcip-annotations|jcommander|assertj-core|hamcrest-library</excludedArtifacts>
+                        <excludedGroups>
+                            tc-sbt-runner.*|com.jetbrains.teamcity.*|org.jetbrains.teamcity.*|org.jetbrains.kotlin.*|org.jetbrains.kotlinx.*|org.jetbrains.intellij.*|com.jetbrains.intellij.*|jetbrains.ring.*|jmock|junit|org.jmock|org.hamcrest|org.mockito
+                        </excludedGroups>
+                        <excludedArtifacts>jcip-annotations|jcommander|assertj-core|hamcrest-library</excludedArtifacts>
                         <force>true</force>
                         <includedScopes>compile,runtime</includedScopes>
                     </configuration>
@@ -52,11 +67,4 @@
             </plugins>
         </pluginManagement>
     </build>
-    <modules>
-        <module>tc-sbt-runner-server</module>
-        <module>tc-sbt-runner-agent</module>
-        <module>tc-sbt-runner-common</module>
-        <module>build</module>
-        <module>tests</module>
-    </modules>
 </project>

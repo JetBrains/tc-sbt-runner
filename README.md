@@ -18,9 +18,22 @@ Otherwise, your component may be not loaded.
  
 See TeamCity documentation for details on plugin development.
 
+## IDE setup
+Open the root `pom.xml` as a Maven project in IntelliJ IDEA. Maven is the source of truth for modules,
+dependencies, repositories, and compiler settings; generated `.iml` files and local IDEA import state are
+ignored.
+
 ## Building the plugin
 Run 'mvn package' command from the root project to build your plugin.
 The resulting package tc-sbt-runner.zip will be placed in the 'target' directory.
+
+The project compiles Java 8-compatible bytecode. By default, the Maven build uses TeamCity `2023.05`
+artifacts and a timestamped plugin version.
+Override them when building against another TeamCity baseline:
+
+```
+mvn package -DteamcityVersion=2024.12 -DteamcityPluginVersion=dev
+```
 
 ## Installing the plugin
 To install the plugin, put the zip archive to the 'plugins' dir under the TeamCity data directory.

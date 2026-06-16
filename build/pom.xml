@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <teamcityPluginVersion>snapshot-${maven.build.timestamp}</teamcityPluginVersion>
         <teamcity.plugin.version>${teamcityPluginVersion}</teamcity.plugin.version>
-        <!--<teamcity.plugin.version>snapshot-${maven.build.timestamp}</teamcity.plugin.version>-->
     </properties>
     <dependencies>
         <dependency>

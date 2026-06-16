@@ -1,4 +1,10 @@
+.DS_Store
 target/
 target/*
-.idea/libraries
-.idea/libraries/*
+.idea/workspace.xml
+.idea/modules.xml
+.idea/libraries/
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/uiDesigner.xml
+.idea/shelf
