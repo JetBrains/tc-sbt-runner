@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:noNamespaceSchemaLocation="urn:shemas-jetbrains-com:teamcity-plugin-v1-xml">
+                 xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
   <info>
     <name>sbt-runner</name>
     <display-name>Simple Build Tool (Scala)</display-name>
     <version>@Version@</version>
     <description>Runs SBT builds</description>
+    <!-- TODO: Decide whether to publish download-url/email/vendor logo metadata for plugin catalog consumers. -->
     <vendor>
       <name>JetBrains</name>
-      <url>http://www.jetbrains.com</url>
+      <url>https://www.jetbrains.com</url>
     </vendor>
   </info>
+  <!-- TODO: Evaluate server-side use-separate-classloader before changing classloading behavior. -->
   <deployment node-responsibilities-aware="true"/>
 </teamcity-plugin>
