@@ -11,7 +11,6 @@
     <packaging>pom</packaging>
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <teamcityPluginVersion>snapshot-${maven.build.timestamp}</teamcityPluginVersion>
         <teamcity.plugin.version>${teamcityPluginVersion}</teamcity.plugin.version>
     </properties>
     <dependencies>
@@ -41,7 +40,7 @@
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
-                <version>1.5.2</version>
+                <version>${maven.replacer.plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>process-sources</phase>
@@ -63,7 +62,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
+                <version>${maven.assembly.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>make-agent-assembly</id>

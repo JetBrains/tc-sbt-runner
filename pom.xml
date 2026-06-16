@@ -16,11 +16,18 @@
     </modules>
 
     <properties>
-        <!-- Default used for local Maven import; CI and release builds can override it with -DteamcityVersion=... -->
-        <teamcityVersion>2023.05</teamcityVersion>
+        <!-- Default used for local Maven import; CI and release builds can override it with -DteamcityVersion=...
+             Keep teamcity-version as an alias because TeamCity SDK examples and existing module POMs use that property name. -->
+        <teamcityVersion>2026.1</teamcityVersion>
         <teamcity-version>${teamcityVersion}</teamcity-version>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <teamcityPluginVersion>snapshot-${maven.build.timestamp}</teamcityPluginVersion>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>
+        <maven.replacer.plugin.version>1.5.3</maven.replacer.plugin.version>
+        <teamcity.sdk.maven.plugin.version>0.4.3</teamcity.sdk.maven.plugin.version>
         <local.repo.path>local-repo</local.repo.path>
     </properties>
     <repositories>
@@ -36,13 +43,29 @@
             <url>https://download.jetbrains.com/teamcity-repository</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>JetBrains</id>
+            <url>https://download.jetbrains.com/teamcity-repository</url>
+        </pluginRepository>
+    </pluginRepositories>
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.teamcity</groupId>
+                <artifactId>teamcity-sdk-maven-plugin</artifactId>
+                <version>${teamcity.sdk.maven.plugin.version}</version>
+                <configuration>
+                    <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
+                </configuration>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.3</version>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
