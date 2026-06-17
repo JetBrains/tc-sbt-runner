@@ -35,6 +35,10 @@ Override them when building against another TeamCity baseline:
 ./mvnw package -DteamcityVersion=2026.1 -DteamcityPluginVersion=dev
 ```
 
+### Building on the CI
+On CI this command is used
+`clean test package license:aggregate-add-third-party`~~~~
+
 ## Installing the plugin
 To install the plugin, put the zip archive to the 'plugins' dir under the TeamCity data directory.
 If you only changed agent-side code of your plugin, the upgrade will be performed 'on the fly' (agents will upgrade when idle).
