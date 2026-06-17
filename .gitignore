@@ -10,3 +10,4 @@ target/*
 .idea/uiDesigner.xml
 .idea/shelf
 .idea/kotlinc.xml
+.idea/encodings.xml
