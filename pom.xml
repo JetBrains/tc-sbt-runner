@@ -6,11 +6,46 @@
     <artifactId>tc-sbt-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>tc-sbt-runner-server</module>
+        <module>tc-sbt-runner-agent</module>
+        <module>tc-sbt-runner-common</module>
+        <module>build</module>
+        <module>tests</module>
+    </modules>
+
     <properties>
+        <!-- Default used for local Maven import; CI and release builds can override it with -DteamcityVersion=...
+             Keep teamcity-version as an alias because TeamCity SDK examples and existing module POMs use that property name. -->
+        <teamcityVersion>2026.1</teamcityVersion>
         <teamcity-version>${teamcityVersion}</teamcity-version>
-        <local.repo.path>${TC_LOCAL_REPO}</local.repo.path>
-        <TC_LOCAL_REPO>local-repo</TC_LOCAL_REPO>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <teamcityPluginVersion>snapshot-${maven.build.timestamp}</teamcityPluginVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.release>8</maven.compiler.release>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
+        <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>
+        <maven.replacer.plugin.version>1.5.3</maven.replacer.plugin.version>
+        <teamcity.sdk.maven.plugin.version>0.4.3</teamcity.sdk.maven.plugin.version>
+        <!-- Pinned to the newest Kotlin Maven plugin version verified locally during the migration planning;
+             it still supports emitting Java 8 bytecode through the existing maven.compiler.release setting. -->
+        <kotlin.version>2.3.21</kotlin.version>
+        <jetbrains.annotations.version>13.0</jetbrains.annotations.version>
+        <local.repo.path>local-repo</local.repo.path>
     </properties>
+    <dependencies>
+        <!-- Keep the Kotlin runtime explicit so TeamCity plugin server/agent assemblies visibly package it. -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+    </dependencies>
     <repositories>
         <repository>
             <id>local-teamcity-artifacts</id>
@@ -24,15 +59,39 @@
             <url>https://download.jetbrains.com/teamcity-repository</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>JetBrains</id>
+            <url>https://download.jetbrains.com/teamcity-repository</url>
+        </pluginRepository>
+    </pluginRepositories>
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.teamcity</groupId>
+                <artifactId>teamcity-sdk-maven-plugin</artifactId>
+                <version>${teamcity.sdk.maven.plugin.version}</version>
+                <configuration>
+                    <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
+                </configuration>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <release>${maven.compiler.release}</release>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -43,8 +102,10 @@
                     <configuration>
                         <thirdPartyFilename>third-party-libraries.json</thirdPartyFilename>
                         <fileTemplate>${maven.multiModuleProjectDirectory}/license-third-party.ftl</fileTemplate>
-           		 		<excludedGroups>tc-sbt-runner.*|com.jetbrains.teamcity.*|org.jetbrains.teamcity.*|org.jetbrains.kotlin.*|org.jetbrains.kotlinx.*|org.jetbrains.intellij.*|com.jetbrains.intellij.*|jetbrains.ring.*|jmock|junit|org.jmock|org.hamcrest|org.mockito</excludedGroups>
-            			<excludedArtifacts>jcip-annotations|jcommander|assertj-core|hamcrest-library</excludedArtifacts>
+                        <excludedGroups>
+                            tc-sbt-runner.*|com.jetbrains.teamcity.*|org.jetbrains.teamcity.*|org.jetbrains.kotlin.*|org.jetbrains.kotlinx.*|org.jetbrains.intellij.*|com.jetbrains.intellij.*|jetbrains.ring.*|jmock|junit|org.jmock|org.hamcrest|org.mockito
+                        </excludedGroups>
+                        <excludedArtifacts>jcip-annotations|jcommander|assertj-core|hamcrest-library</excludedArtifacts>
                         <force>true</force>
                         <includedScopes>compile,runtime</includedScopes>
                     </configuration>
@@ -52,11 +113,4 @@
             </plugins>
         </pluginManagement>
     </build>
-    <modules>
-        <module>tc-sbt-runner-server</module>
-        <module>tc-sbt-runner-agent</module>
-        <module>tc-sbt-runner-common</module>
-        <module>build</module>
-        <module>tests</module>
-    </modules>
 </project>
