@@ -6,9 +6,7 @@ object SbtCommandFileContentBuilder {
 
     /**
      * Builds the text written to sbt's redirected command file.
-     *
-     * Inferred historical intent: print the user commands from a new line for better visibility of the
-     * commands in the TeamCity build output.
+     * It prints the user commands from a new line for better visibility of the commands in the TeamCity build output.
      *
      * Example:
      * ```
@@ -28,17 +26,42 @@ object SbtCommandFileContentBuilder {
     /**
      * Converts the TeamCity `SBT commands:` field into commands for sbt's redirected command-file mode.
      *
-     * The field is intentionally close to, but not exactly, a terminal prompt.
-     *
-     * Space-separated input such as `clean compile test` is treated like `sbt clean compile test`:
-     * each shell word becomes a separate sbt command.
+     * The field is intentionally similar to the terminal prompt but is not exactly the same.
+     * For example simple space-separated input such as `clean compile test` is effectively treated like `sbt clean compile test`.
+     * Each shell word becomes a separate sbt command. This is effectively equivilent to `sbt ";clean;compile;test`:
+     * ```
+     * Input: `clean compile test`
+     * Output:
+     *  ; clean
+     *  ; compile
+     *  ; test
+     * ```
      *
      * Quoted input such as `"testOnly Foo -- -z \"name\""` is treated like one shell-quoted sbt argument,
      * so the surrounding quotes group the command and are not sent to sbt.
+     * Other input is split into commands, each on a new line:
+     * ```
+     * Input:  `clean "testOnly example.Test -- -t \"specific test\""`
+     * Output:
+     * ; clean
+     * ; testOnly example.Test -- -t "specific test"
+     * ```
      *
      * Raw semicolon chains are the compatibility exception.
      * TeamCity accepts `;clean;compile;test` directly because the field is not parsed by a shell;
      * in a terminal the same chain would need quoting, for example `sbt ';clean;compile;test'`.
+     *
+     * Already semicolon-prefixed input is trimmed and returned unchanged:
+     * ```
+     * Input:  ` ;clean;compile `
+     * Output: `;clean;compile`
+     * ```
+     *
+     * An input containing a semicolon outside quotes receives a leading semicolon:
+     * ```
+     * Input:  `clean;compile`
+     * Output: `;clean;compile`
+     * ```
      *
      * The command file remains an implementation detail that lets the runner
      * prepend TeamCity logger setup commands before feeding the user's commands to sbt.
@@ -66,7 +89,7 @@ object SbtCommandFileContentBuilder {
         StringUtil.splitHonorQuotes(" $text ", ';').size > 1
 
     /**
-     * Similar to [[StringUtil.splitCommandArgumentsAndUnquote]] but keeps single-quoted and double-quoted runner input equivalent.
+     * Similar to [StringUtil.splitCommandArgumentsAndUnquote] but keeps single-quoted and double-quoted runner input equivalent.
      *
      * [StringUtil.splitCommandArgumentsAndUnquote] uses both quote characters for grouping but removes
      * only surrounding double quotes (") from the returned tokens.

@@ -6,7 +6,7 @@ import java.io.File
  * Contains paths to common dirs in the current repository that are needed in some tests
  */
 internal object RepoPaths {
-    /** Repository root, resolved from either the root itself or the tests module working directory. */
+
     val root: File by lazy {
         val workingDirectory = File("").absoluteFile
 
