@@ -6,6 +6,7 @@ object SbtRunnerConstants {
     const val RUNNER_DESCRIPTION = "Runs SBT builds"
 
     const val SBT_HOME_PARAM = "sbt.home"
+    // Q: rename "args" to "commands"?
     const val SBT_ARGS_PARAM = "sbt.args"
     const val SBT_INSTALLATION_MODE_PARAM = "sbt.installationMode"
 

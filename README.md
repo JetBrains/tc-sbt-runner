@@ -18,6 +18,32 @@ Otherwise, your component may be not loaded.
  
 See TeamCity documentation for details on plugin development.
 
+### Kotlin DSL descriptor
+`kotlin-dsl/SBT.xml` describes the generated TeamCity Kotlin DSL API for the SBT runner. 
+It defines the DSL build step type, class and function descriptions, parameter names, parameter descriptions, options,
+and examples that Kotlin DSL users see in generated DSL documentation and IDE assistance.
+
+The file is copied into the plugin ZIP under `kotlin-dsl/SBT.xml` by `build/plugin-assembly.xml`.
+TeamCity consumes it as a DSL descriptor, not as the build step edit UI. The contents of `<description>`
+elements are XML text and should be written as Markdown/KDoc-style documentation text. 
+Existing descriptions already use Markdown-style links. 
+Use Markdown block syntax, including blank lines before lists, when rendered line breaks or lists matter.
+
+### Server module
+`tc-sbt-runner-server` is the TeamCity server-side part of the plugin. It is built as a JAR and packaged
+under the plugin ZIP `server` directory. It depends on TeamCity server APIs and `server-web-api`, and it
+contains the server extension classes plus the JSP resources used by the TeamCity web UI.
+
+The module is wired through `tc-sbt-runner-server/src/main/resources/META-INF/build-server-plugin-tc-sbt-runner.xml`.
+That Spring descriptor registers:
+- `SbtRunnerRunType`, which registers the SBT runner type, default parameters, validation, displayed
+  parameter summary, and paths to the edit/view JSP files.
+- `SbtRunnerDiscoveryExtension`, which lets TeamCity suggest the SBT runner when `.sbt` files are found.
+
+The UI resources live in `tc-sbt-runner-server/src/main/resources/buildServerResources`:
+- `editSbtRunParams.jsp` is displayed on the TeamCity build step edit page. It is processed as JSP and rendered as HTML in the browser.
+- `viewSbtRunParams.jsp` is displayed on the read-only build step parameters view.
+
 ## IDE setup
 Open the root `pom.xml` as a Maven project in IntelliJ IDEA. Maven is the source of truth for modules,
 dependencies, repositories, and compiler settings; generated `.iml` files and local IDEA import state are

@@ -11,7 +11,35 @@
         </th>
         <td>
             <props:textProperty name="sbt.args" className="longField" expandable="true"/>
-            <span class="smallNote">Commands to execute, e.g. <i>clean compile test</i> or <i>;clean;set scalaVersion:="2.11.6";compile;test</i> for commands containing quotes</span>
+            <div class="smallNote">
+                <p>Commands to execute.</p>
+                <p>
+                    Whitespace-separated arguments are treated as separate sbt commands.<br>
+                    Quote a whole command when it contains spaces using <code>'...'</code> or <code>"..."</code>.
+                </p>
+                <p>Examples:</p>
+                <ul style="margin: 0.25em 0; padding-left: 1.5em;">
+                    <li><code>clean compile test</code> (runs 3 commands).</li>
+                    <li><code>'set scalaVersion := "3.8.3"'</code> (runs 1 command).</li>
+                    <li><code>"testOnly example.Test1 example.Test2"</code> (runs 1 command).</li>
+                    <li><code>"testOnly example.Test1" "testOnly example.Test2"</code> (runs 2 commands).</li>
+                    <li>
+                        <code>"testOnly example.Test -- -t \"specific test\""</code> (runs 1 command)
+                        (notice that the test case name escapes quotes as the command is inside quotes already).
+                    </li>
+                </ul>
+                <p>
+                    An alternative to using quotes can be using <code>;</code>.<br>
+                    If a semicolon is detected in the input outside the quoted content, the input is treated as an sbt command chain.<br>
+                    The leading <code>;</code> is optional.
+                </p>
+                <p>Examples:</p>
+                <ul style="margin: 0.25em 0; padding-left: 1.5em;">
+                    <li><code>clean ; set scalaVersion:="2.11.6" ; compile ; test</code> (sbt will run 4 commands).</li>
+                    <li><code>;clean;compile;test</code> (sbt will run 3 commands).</li>
+                    <li><code>"set name :=\"name with ; inside\""</code> (sbt runs 1 command, <code>;</code> is part of the quoted content).</li>
+                </ul>
+            </div>
         </td>
     </tr>
     <tr>
@@ -56,4 +84,3 @@
     <props:editJavaHome/>
     <props:editJvmArgs/>
 </l:settingsGroup>
-

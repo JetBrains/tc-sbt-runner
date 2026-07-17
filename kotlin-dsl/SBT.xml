@@ -24,8 +24,24 @@
 
         <param name="sbt.args" dslName="commands">
             <description>
-                Commands to execute, e.g. 'clean compile test' or
-                ';clean;set scalaVersion:="2.11.6";compile;test' for commands containing quotes.
+                Commands to execute.
+                Whitespace-separated arguments are treated as separate sbt commands.
+                Quote a whole command when it contains spaces using `'...'` or `"..."`.
+                Examples:
+                   - `clean compile test` (runs 3 commands)
+                   - `'set scalaVersion := "3.8.3"'` (runs 1 command)
+                   - `"testOnly example.Test1 example.Test2"` (runs 1 command)
+                   - `"testOnly example.Test1" "testOnly example.Test2"` (runs 2 commands)
+                   - `"testOnly example.Test -- -t \"specific test\""` (runs 1 command)
+                      (notice that the test case name escapes quotes as the command is inside quotes already)
+
+                An alternative to using quotes can be using `;`.
+                If a semicolon is detected in the input outside the quoted content, the input is treated as an sbt command chain.
+                The leading `;` is optional.
+                Examples:
+                   - `clean ; set scalaVersion:="2.11.6" ; compile ; test` (sbt will run 4 commands)
+                   - `;clean;compile;test` (sbt will run 3 commands)
+                   - `"set name :=\"name with ; inside\""` (sbt runs 1 command, `;` is part of the quoted content)
             </description>
         </param>
 

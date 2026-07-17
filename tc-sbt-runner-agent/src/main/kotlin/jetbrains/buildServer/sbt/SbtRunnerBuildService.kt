@@ -223,22 +223,24 @@ class SbtRunnerBuildService(
         get() = ivyCacheProvider.cacheDir.absolutePath
 
     fun getCommands(sbtVersion: SBTVersion): List<String> {
-        val args = runnerParameters[SbtRunnerConstants.SBT_ARGS_PARAM]?.trim().orEmpty()
-        if (StringUtil.isEmpty(args)) {
+        val sbtCommands = runnerParameters[SbtRunnerConstants.SBT_ARGS_PARAM]?.trim().orEmpty()
+        if (StringUtil.isEmpty(sbtCommands)) {
             logger.warning("No commands specified.")
             return emptyList()
         }
-        return getCommandsFromFile(args, sbtVersion)
+        return getCommandsFromFile(sbtCommands, sbtVersion)
     }
 
-    private fun getCommandsFromFile(args: String, sbtVersion: SBTVersion): List<String> =
+    private fun getCommandsFromFile(sbtCommands: String, sbtVersion: SBTVersion): List<String> =
         try {
             val file = FileUtil.createTempFile(agentTempDirectory, "commands", ".file", true)
-            val content = String.format(
-                INFILE_COMMANDS_FORMATTER,
+            val prologueCommands = listOf(
                 getApplyCommand(sbtVersion),
                 getCheckStatusCommand(),
-                prepareArgs(args),
+            )
+            val content = SbtCommandFileContentBuilder.build(
+                sbtCommands,
+                prologueCommands,
             )
             val name = file.absolutePath
             logger.activityStarted("Prepare SBT run", "Write commands to file.", BUILD_ACTIVITY_TYPE)
@@ -251,18 +253,6 @@ class SbtRunnerBuildService(
             LOG.warn(e.message, e)
             emptyList()
         }
-
-    private fun prepareArgs(args: String): String {
-        if (args.startsWith(";")) {
-            return args
-        }
-        return args
-            .split(" ")
-            .asSequence()
-            .map(String::trim)
-            .filter(String::isNotEmpty)
-            .joinToString(separator = "") { "\n; $it" }
-    }
 
     override fun afterProcessFinished() {
         super.afterProcessFinished()
@@ -324,7 +314,6 @@ class SbtRunnerBuildService(
         private const val SBT_1_0_PATCH_FOLDER_NAME = "1.0"
         private const val SBT_DISTRIB = "sbt-distrib"
         private const val SBT_AUTO_HOME_FOLDER = "agent-sbt"
-        private const val INFILE_COMMANDS_FORMATTER = ";%s ;%s %s"
         private const val RUN_INFILE_COMMANDS_FORMATTER = "< %s"
         private const val SBT_INSTALLATION_STEP_NAME = "SBT installation"
         private const val SBT_TEAMCITY_LOGGER_INSTALLATION = "SBT TeamCity logger installation"
@@ -348,5 +337,8 @@ class SbtRunnerBuildService(
         )
 
         private const val SBT_PATCH_CLASS_NAME = "jetbrains.buildServer.sbtlogger.SbtTeamCityLogger"
+
+        @JvmStatic
+        fun prepareArgs(args: String): String = SbtCommandFileContentBuilder.prepareArgs(args)
     }
 }
