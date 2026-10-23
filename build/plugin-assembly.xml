@@ -18,6 +18,10 @@
          <source>../kotlin-dsl/SBT.xml</source>
          <outputDirectory>kotlin-dsl</outputDirectory>
      </file>
+     <file>
+         <source>../ui-schemas/simple-build-tool-step-ui-schema.json</source>
+         <outputDirectory>ui-schemas</outputDirectory>
+     </file>
   </files>
   <moduleSets>
     <moduleSet>
