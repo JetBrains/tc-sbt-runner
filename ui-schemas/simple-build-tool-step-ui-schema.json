@@ -1,0 +1,59 @@
+{
+  "title": "Simple Build Tool (Scala)",
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "SBT commands",
+      "scope": "#/properties/commands",
+      "options": {
+        "description": "Commands to execute.\n\nWhitespace-separated arguments are treated as separate sbt commands. Quote a whole command when it contains spaces using `'...'` or `\"...\"`.\n\nExamples:\n- `clean compile test` (runs 3 commands).\n- `'set scalaVersion := \"3.8.3\"'` (runs 1 command).\n- `\"testOnly example.Test1 example.Test2\"` (runs 1 command).\n- `\"testOnly example.Test1\" \"testOnly example.Test2\"` (runs 2 commands).\n- `\"testOnly example.Test -- -t \\\"specific test\\\"\"` (runs 1 command) (notice that the test case name escapes quotes as the command is inside quotes already).\n\nAn alternative to using quotes can be using `;`. If a semicolon is detected in the input outside the quoted content, the input is treated as an sbt command chain. The leading `;` is optional.\n\nExamples:\n- `clean ; set scalaVersion:=\"2.11.6\" ; compile ; test` (sbt will run 4 commands).\n- `;clean;compile;test` (sbt will run 3 commands).\n- `\"set name :=\\\"name with ; inside\\\"\"` (sbt runs 1 command, `;` is part of the quoted content)."
+      }
+    },
+    {
+      "type": "Control",
+      "label": "SBT installation mode",
+      "scope": "#/properties/installation-mode",
+      "options": {
+        "branches": {
+          "custom": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "label": "SBT home path",
+                "scope": "#/properties/sbt-home",
+                "options": {
+                  "description": "The path to the existing SBT home directory"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "InputPathControl",
+      "label": "Working directory",
+      "scope": "#/properties/working-directory",
+      "options": {
+        "placeholder": "repository root"
+      }
+    },
+    {
+      "type": "JavaVersionPickerControl",
+      "label": "JDK",
+      "scope": "#/properties/jdk-home"
+    },
+    {
+      "type": "AdvancedSettingsSection",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "JVM command line parameters",
+          "scope": "#/properties/jvm-args"
+        }
+      ]
+    }
+  ]
+}
